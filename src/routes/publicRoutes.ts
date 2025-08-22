@@ -1,0 +1,24 @@
+import { lazy } from "react";
+import PublicLayout from "@/components/layouts/PublicLayout";
+
+const Home = lazy(() => import("@/pages/public/Home"));
+const About = lazy(() => import("@/pages/public/About"));
+const Pricing = lazy(() => import("@/pages/public/Pricing"));
+const Features = lazy(() => import("@/pages/public/Features"));
+const FAQ = lazy(() => import("@/pages/public/FAQ"));
+const Contact = lazy(() => import("@/pages/public/Contact"));
+
+const publicRoutes = {
+  path: "/",
+  Component: PublicLayout,
+  children: [
+    { index: true, Component: Home },
+    { path: "about", Component: About },
+    { path: "pricing", Component: Pricing },
+    { path: "features", Component: Features },
+    { path: "faq", Component: FAQ },
+    { path: "contact", Component: Contact },
+  ],
+};
+
+export default publicRoutes;

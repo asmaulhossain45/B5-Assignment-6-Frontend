@@ -9,6 +9,7 @@ import {
 } from "../ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { Roles } from "@/constants/Roles";
+import { NavLink } from "react-router";
 
 interface Props {
   role: Roles;
@@ -16,6 +17,17 @@ interface Props {
   children: React.ReactNode;
   className?: string;
 }
+
+const userLinks = [
+  {
+    path: "/profile",
+    label: "Profile",
+  },
+  {
+    path: "/dashboard",
+    label: "Dashboard",
+  },
+];
 
 const ProfileDropdown = ({
   children,
@@ -31,8 +43,11 @@ const ProfileDropdown = ({
         <DropdownMenuGroup>
           <DropdownMenuItem>{role}</DropdownMenuItem>
           <DropdownMenuItem>Ballance</DropdownMenuItem>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Dashboard</DropdownMenuItem>
+          {userLinks.map((item, index) => (
+            <DropdownMenuItem key={index}>
+              <NavLink to={item.path}>{item.label}</NavLink>
+            </DropdownMenuItem>
+          ))}
           <DropdownMenuItem>Log out</DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

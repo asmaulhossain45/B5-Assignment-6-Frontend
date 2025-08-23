@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { toast } from "sonner";
 import ProfileDropdown from "./ProfileDropdown";
 import { Roles } from "@/constants/Roles";
+import { useState } from "react";
 
 interface Props {
   user: boolean;
@@ -24,11 +25,13 @@ interface Props {
 }
 
 const MobileMenu = ({ children, user = false, navlinks }: Props) => {
+  const [open, setOpen] = useState(false);
+
   const handleLogout = () => {
     toast.success("Logout successful!");
   };
   return (
-    <Drawer direction="right">
+    <Drawer direction="right" open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="flex-row items-center justify-between border-b">
@@ -50,6 +53,7 @@ const MobileMenu = ({ children, user = false, navlinks }: Props) => {
               className={({ isActive }) =>
                 cn("border-b py-2 px-4", isActive && "")
               }
+              onClick={() => setOpen(false)}
             >
               {item.label}
             </NavLink>

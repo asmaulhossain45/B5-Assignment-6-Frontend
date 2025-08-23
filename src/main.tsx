@@ -1,10 +1,10 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
 import "./styles/index.css";
-import { RouterProvider } from "react-router";
-import router from "./routes/Router.tsx";
-import { ThemeProvider } from "./providers/theme-provider.tsx";
 import { Toaster } from "sonner";
+import { StrictMode } from "react";
+import { router } from "./routes/Router.tsx";
+import { createRoot } from "react-dom/client";
+import { RouterProvider } from "react-router";
+import { ThemeProvider } from "./providers/theme-provider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

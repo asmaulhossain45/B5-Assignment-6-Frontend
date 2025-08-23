@@ -8,7 +8,7 @@ const Features = lazy(() => import("@/pages/public/Features"));
 const FAQ = lazy(() => import("@/pages/public/FAQ"));
 const Contact = lazy(() => import("@/pages/public/Contact"));
 
-const publicRoutes = {
+export const publicRoutes = {
   path: "/",
   Component: PublicLayout,
   children: [
@@ -20,5 +20,3 @@ const publicRoutes = {
     { path: "contact", Component: Contact },
   ],
 };
-
-export default publicRoutes;

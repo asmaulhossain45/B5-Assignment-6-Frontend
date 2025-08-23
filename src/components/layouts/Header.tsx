@@ -20,7 +20,7 @@ const navLinks = [
 ];
 
 const Header = () => {
-  const user = false;
+  const user = true;
 
   return (
     <header

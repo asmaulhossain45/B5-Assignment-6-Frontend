@@ -1,10 +1,10 @@
 import type { Roles } from "@/constants/Roles";
-import { lazy, type ComponentType } from "react";
-import { createBrowserRouter } from "react-router";
+import { lazy, type ComponentType, type ElementType } from "react";
+import { createBrowserRouter} from "react-router";
 
-import userRoutes from "./userRoutes";
-import publicRoutes from "./publicRoutes";
-import authRoutes from "./authRoutes";
+import { userRoutes } from "./userRoutes";
+import { publicRoutes } from "./publicRoutes";
+import { authRoutes } from "./authRoutes";
 
 const NotFound = lazy(() => import("@/pages/public/NotFound"));
 const DashboardLayout = lazy(
@@ -13,12 +13,12 @@ const DashboardLayout = lazy(
 
 export type Route = {
   path: string;
-  Component?: ComponentType;
+  Component?: ComponentType | ElementType;
   children?: Route[];
   roles?: Roles[];
 };
 
-const router = createBrowserRouter([
+export const router = createBrowserRouter([
   publicRoutes,
   authRoutes,
   {
@@ -29,7 +29,5 @@ const router = createBrowserRouter([
   {
     path: "*",
     Component: NotFound,
-  }
+  },
 ]);
-
-export default router;

@@ -8,7 +8,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const ProtectedRoute = ({ roles, children }: Props) => {
+export const ProtectedRoute = ({ roles, children }: Props) => {
   const userRole: Roles | undefined = useSelector(
     (state: RootState) => state.auth.user?.role
   );
@@ -18,5 +18,3 @@ const ProtectedRoute = ({ roles, children }: Props) => {
 
   return <>{children}</>;
 };
-
-export default ProtectedRoute;

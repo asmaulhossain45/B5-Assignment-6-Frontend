@@ -13,7 +13,7 @@ export const authRoutes = {
   path: "/auth",
   Component: AuthLayout,
   children: [
-    { index: true, element: <Navigate to="/auth/login" replace /> },
+    { index: true, Component: () => <Navigate to="/auth/login" replace /> },
     { path: "login", Component: Login },
     { path: "register", Component: Register },
     { path: "forgot-password", Component: ForgotPassword },

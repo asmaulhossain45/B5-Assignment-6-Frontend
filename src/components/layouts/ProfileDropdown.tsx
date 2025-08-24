@@ -39,7 +39,7 @@ const ProfileDropdown = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent className={cn(className)} align={align}>
-        <DropdownMenuLabel>John Doe</DropdownMenuLabel>
+        <DropdownMenuLabel>Asmaul Hossain</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem>{role}</DropdownMenuItem>
           <DropdownMenuItem>Ballance</DropdownMenuItem>

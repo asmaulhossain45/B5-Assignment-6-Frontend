@@ -27,13 +27,15 @@ const formSchema = z.object({
 const VerifyOtp = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email;
+  const {email, action} = location.state;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       otp: "",
     },
   });
+
+  console.log(email, action);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     const toastId = toast.loading("Verifying OTP...");
@@ -71,7 +73,7 @@ const VerifyOtp = () => {
 
                 <FormControl>
                   <InputOTP maxLength={6} {...field}>
-                    <InputOTPGroup className="flex items-center">
+                    <InputOTPGroup className="flex items-center gap-1">
                       {[...Array(6)].map((_, index) => (
                         <InputOTPSlot key={index} index={index} />
                       ))}

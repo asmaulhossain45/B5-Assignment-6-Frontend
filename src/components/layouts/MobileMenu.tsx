@@ -1,4 +1,5 @@
-import { Link, NavLink } from "react-router";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Link, NavLink, useNavigate } from "react-router";
 import { Button } from "../ui/button";
 import {
   Drawer,
@@ -15,24 +16,39 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { toast } from "sonner";
 import ProfileDropdown from "./ProfileDropdown";
-import { Roles } from "@/constants/Roles";
 import { useState } from "react";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useLogoutMutation } from "@/redux/features/auth/auth.api";
+import { baseApi } from "@/redux/baseApi";
+import { useAppDispatch } from "@/redux/hook";
 
 interface Props {
-  user: boolean;
   navlinks: { path: string; label: string }[];
   children: React.ReactNode;
 }
 
-const MobileMenu = ({ children, user = false, navlinks }: Props) => {
+const MobileMenu = ({ children, navlinks }: Props) => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [logout] = useLogoutMutation();
+  const { currentUser } = useCurrentUser();
   const [open, setOpen] = useState(false);
 
-  const handleLogout = () => {
-    toast.success("Logout successful!");
+  const handleLogout = async () => {
+    const toastId = toast.loading("Logging out...");
+    try {
+      await logout().unwrap();
+      dispatch(baseApi.util.resetApiState());
+      toast.success("Logout successful!", { id: toastId });
+      navigate("/auth/login");
+    } catch (error) {
+      toast.error("Logout failed!", { id: toastId });
+    }
   };
+
   return (
     <Drawer direction="right" open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+      <DrawerTrigger>{children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="flex-row items-center justify-between border-b">
           <DrawerTitle>
@@ -61,15 +77,15 @@ const MobileMenu = ({ children, user = false, navlinks }: Props) => {
         </nav>
 
         <DrawerFooter>
-          {!user && (
+          {!currentUser && (
             <Button>
               <Link to="/auth/login">Login</Link>
             </Button>
           )}
 
-          {user && (
+          {currentUser && (
             <div className="flex items-center justify-between gap-4">
-              <ProfileDropdown role={Roles.USER} align="start" className="mb-2">
+              <ProfileDropdown layout="public" align="start" className="mb-2">
                 <Avatar>
                   <AvatarImage src="https://github.com/shadcn.png" />
                   <AvatarFallback>CN</AvatarFallback>

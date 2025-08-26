@@ -10,11 +10,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import type { TErrorResponse } from "@/types/ErrorResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -24,21 +26,30 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
+  const navige = useNavigate();
+  const [login, { isLoading }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "demouser@gmail.com",
+      password: "123456789",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (credentials: z.infer<typeof formSchema>) => {
     const toastId = toast.loading("Logging in...");
-    console.log(data);
-    form.reset();
-    toast.success("Login successful!", { id: toastId });
+
+    try {
+      await login(credentials).unwrap();
+      form.reset();
+      toast.success("Login successful!", { id: toastId });
+      navige("/");
+    } catch (err: unknown) {
+      const error = err as { data: TErrorResponse };
+      toast.error(error?.data?.message || "Login failed!", { id: toastId });
+    }
   };
 
   return (
@@ -109,7 +120,11 @@ const LoginForm = () => {
           )}
         />
 
-        <Button type="submit" className="w-full rounded-sm">
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="w-full rounded-sm"
+        >
           Login
         </Button>
       </form>

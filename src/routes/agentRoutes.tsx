@@ -22,8 +22,8 @@ export const agentRoutes: TRoute[] = [
   {
     icon: User,
     Component: Home,
-    label: "Overview",
-    path: "agent/overview",
+    label: "Profile",
+    path: "agent/profile",
     roles: [Roles.AGENT],
   },
   {

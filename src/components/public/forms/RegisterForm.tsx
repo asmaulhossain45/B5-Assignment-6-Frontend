@@ -11,11 +11,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Roles } from "@/constants/Roles";
 import { cn } from "@/lib/utils";
+import {
+  useRegisterAgentMutation,
+  useRegisterUserMutation,
+} from "@/redux/features/auth/auth.api";
+import type { TErrorResponse } from "@/types/ErrorResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -32,31 +39,42 @@ const formSchema = z.object({
 });
 
 const RegisterForm = ({ role }: Props) => {
+  const [registerUser, { isLoading: isLoadingUser }] =
+    useRegisterUserMutation();
+  const [registerAgent, { isLoading: isLoadingAgent }] =
+    useRegisterAgentMutation();
+
+  const navigate = useNavigate();
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
+      name: "user demo",
+      email: "userdemo@gmail.com",
+      password: "12345678",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    const toastId = toast.loading("Logging in...");
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    const toastId = toast.loading("Registering...");
 
     try {
-      if (role === "user") {
-        toast.success("User Login successful!", { id: toastId });
-      } else if (role === "agent") {
-        toast.success("Agent Login successful!", { id: toastId });
+      if (role === Roles.USER) {
+        await registerUser(data).unwrap();
+        toast.success("User Register successful!", { id: toastId });
+        navigate("/auth/login");
+      } else if (role === Roles.AGENT) {
+        await registerAgent(data).unwrap();
+        toast.success("Agent Register successful!", { id: toastId });
+        navigate("/auth/login");
       }
-    } catch (err) {
-      toast.error("Login failed!", { id: toastId });
+    } catch (err: unknown) {
+      const error = err as { data: TErrorResponse };
+      const message = error?.data?.message || "Registration failed!";
+      toast.error(message, { id: toastId });
     }
-    console.log(data);
   };
 
   return (
@@ -147,7 +165,7 @@ const RegisterForm = ({ role }: Props) => {
 
         <Button
           type="submit"
-          disabled={!acceptTerms}
+          disabled={!acceptTerms || isLoadingUser || isLoadingAgent}
           className="w-full rounded-sm"
         >
           Register

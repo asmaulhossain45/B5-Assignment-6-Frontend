@@ -1,10 +1,11 @@
 import { Roles } from "@/constants/Roles";
-import { userRoutes } from "./userRoutes";
-import { agentRoutes } from "./agentRoutes";
-import { adminRoutes } from "./adminRoutes";
-import { superAdminRoutes } from "./superAdminRoutes";
+import { adminRoutes } from "@/routes/adminRoutes";
+import { agentRoutes } from "@/routes/agentRoutes";
+import { superAdminRoutes } from "@/routes/superAdminRoutes";
+import { userRoutes } from "@/routes/userRoutes";
 
-export const getRoutesByRole = (role: Roles) => {
+export const getSidebarItme = ( role:Roles) => {
+    console.log(role);
   switch (role) {
     case Roles.USER:
       return userRoutes;

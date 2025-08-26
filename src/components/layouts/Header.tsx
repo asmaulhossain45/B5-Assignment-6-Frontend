@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import AppSection from "../public/common/AppSection";
 import { ThemeToggle } from "../common/ThemeToggle";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import MobileMenu from "./MobileMenu";
 import ProfileDropdown from "./ProfileDropdown";
 import { Menu } from "lucide-react";
-import { Roles } from "@/constants/Roles";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { CurrentUserAvatar } from "../ui/user-avatar";
 
 const navLinks = [
   { path: "/", label: "Home" },
@@ -20,7 +20,8 @@ const navLinks = [
 ];
 
 const Header = () => {
-  const user = true;
+const {currentUser} = useCurrentUser();
+
 
   return (
     <header
@@ -53,31 +54,25 @@ const Header = () => {
 
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          {!user && (
+          {!currentUser && (
             <Link to={"auth/login"} className="hidden lg:block">
               <Button variant={"default"}>Login</Button>
             </Link>
           )}
 
-          {user && (
-            <ProfileDropdown role={Roles.USER} className="mt-4">
-              <Avatar className="hidden lg:block">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+          {currentUser && (
+            <ProfileDropdown layout="public" className="mt-4">
+              <CurrentUserAvatar className="hidden lg:block"/>
             </ProfileDropdown>
           )}
 
-          <MobileMenu user={user} navlinks={navLinks}>
-            {!user ? (
+          <MobileMenu navlinks={navLinks}>
+            {!currentUser ? (
               <Button variant={"outline"} size={"icon"} className="lg:hidden">
                 <Menu size={18} />
               </Button>
             ) : (
-              <Avatar className="lg:hidden">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              <CurrentUserAvatar className="lg:hidden"/>
             )}
           </MobileMenu>
         </div>

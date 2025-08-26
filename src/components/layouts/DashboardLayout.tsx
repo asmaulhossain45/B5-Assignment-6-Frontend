@@ -1,17 +1,19 @@
 import { Outlet } from "react-router";
 import { SidebarProvider } from "../ui/sidebar";
-import AppSidebar from "./AppSidebar";
 import Topbar from "./Topbar";
-import type { TRoute } from "@/types/TRoute";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import Loading from "@/pages/public/Loading";
+import AppSidebar from "./AppSidebar";
 
-type Props = {
-  routes: TRoute[];
-};
 
-const DashboardLayout = ({ routes }: Props) => {
+const DashboardLayout = () => {
+  const {userLoading} = useCurrentUser();
+
+  if (userLoading) return <Loading type="page" size="lg" />;
+
   return (
     <SidebarProvider>
-      <AppSidebar routes={routes} />
+      <AppSidebar />
       <div className="w-full">
         <Topbar />
         <main className="p-4 md:p-8">

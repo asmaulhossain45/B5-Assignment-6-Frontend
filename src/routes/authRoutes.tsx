@@ -3,16 +3,12 @@ import { Navigate } from "react-router";
 
 const Login = lazy(() => import("@/pages/auth/Login"));
 const Register = lazy(() => import("@/pages/auth/Register"));
-const AuthLayout = lazy(() => import("@/components/layouts/AuthLayout"));
 const ForgotPassword = lazy(() => import("@/pages/auth/ForgotPassword"));
 const VerifyOtp = lazy(() => import("@/pages/auth/VerifyOtp"));
 const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"));
 const ChangePassword = lazy(() => import("@/pages/auth/ChangePassword"));
 
-export const authRoutes = {
-  path: "/auth",
-  Component: AuthLayout,
-  children: [
+export const authRoutes = [
     { index: true, Component: () => <Navigate to="/auth/login" replace /> },
     { path: "login", Component: Login },
     { path: "register", Component: Register },
@@ -20,5 +16,4 @@ export const authRoutes = {
     { path: "verify-otp", Component: VerifyOtp },
     { path: "reset-password", Component: ResetPassword },
     { path: "change-password", Component: ChangePassword },
-  ],
-};
+  ]

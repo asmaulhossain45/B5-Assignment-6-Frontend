@@ -2,8 +2,7 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "../common/ThemeToggle";
 import { SidebarTrigger } from "../ui/sidebar";
 import ProfileDropdown from "./ProfileDropdown";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Roles } from "@/constants/Roles";
+import { CurrentUserAvatar } from "../ui/user-avatar";
 
 const Topbar = () => {
   return (
@@ -18,11 +17,8 @@ const Topbar = () => {
       <div className="flex items-center gap-4">
         <ThemeToggle />
 
-        <ProfileDropdown role={Roles.USER} className="mt-4">
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+        <ProfileDropdown layout="dashboard" className="mt-4">
+          <CurrentUserAvatar/>
         </ProfileDropdown>
       </div>
     </header>

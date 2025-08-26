@@ -12,17 +12,19 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "../ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Logo from "@/assets/brand/Logo.png";
 import { X } from "lucide-react";
 import type { TRoute } from "@/types/TRoute";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { CurrentUserAvatar } from "../ui/user-avatar";
+import { getSidebarItme } from "@/utils/getSidebarItem";
 
-type Props = {
-  routes: TRoute[];
-};
 
-const AppSidebar = ({ routes }: Props) => {
+const AppSidebar = () => {
+  const {userRole} = useCurrentUser();
+  const routes: TRoute[] = getSidebarItme(userRole)
   const pathname = useLocation().pathname;
+  const {currentUser} = useCurrentUser();
 
   return (
     <Sidebar>
@@ -60,17 +62,14 @@ const AppSidebar = ({ routes }: Props) => {
       </SidebarContent>
 
       <SidebarFooter className="flex flex-row items-center gap-2 overflow-hidden">
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <CurrentUserAvatar/>
 
         <div className="space-y-[2px]">
           <h6 className="text-sm font-semibold capitalize line-clamp-1">
-            Asmaul Hossain
+            {currentUser?.name}
           </h6>
           <p className="description text-[10px] lowercase line-clamp-1">
-            johndoe@gmail.com
+            {currentUser?.email}
           </p>
         </div>
       </SidebarFooter>

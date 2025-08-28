@@ -1,8 +1,8 @@
+import { Navigate } from "react-router";
+import type { ComponentType } from "react";
+import Loading from "@/pages/public/Loading";
 import type { Roles } from "@/constants/Roles";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import Loading from "@/pages/public/Loading";
-import type { ComponentType } from "react";
-import { Navigate } from "react-router";
 
 type Props = {
   allowedRoles: Roles[];

@@ -5,7 +5,6 @@ import { superAdminRoutes } from "@/routes/superAdminRoutes";
 import { userRoutes } from "@/routes/userRoutes";
 
 export const getSidebarItme = ( role:Roles) => {
-    console.log(role);
   switch (role) {
     case Roles.USER:
       return userRoutes;

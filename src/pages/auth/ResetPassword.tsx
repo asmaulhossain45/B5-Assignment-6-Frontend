@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useResetPasswordMutation } from "@/redux/features/auth/auth.api";
+import type { TErrorResponse } from "@/types/ErrorResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft, Eye, EyeOff, ShieldEllipsis } from "lucide-react";
 import { useState } from "react";
@@ -35,7 +37,9 @@ const formSchema = z
 const ResetPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email;
+  const { email, otp } = location.state;
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -47,12 +51,22 @@ const ResetPassword = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const toastId = toast.loading("Resetting password...");
-    console.log(data, email);
-    form.reset();
-    toast.success("Password reset successfully!", { id: toastId });
-    navigate("/auth/login");
+    try {
+      await resetPassword({
+        email,
+        otp,
+        newPassword: data.newPassword,
+      }).unwrap();
+      form.reset();
+      toast.success("Password reset successfully!", { id: toastId });
+      navigate("/auth/login");
+    } catch (error) {
+      const err = error as { data: TErrorResponse };
+      const message = err?.data?.message || "Something went wrong!";
+      toast.error(message, { id: toastId });
+    }
   };
 
   return (
@@ -146,7 +160,11 @@ const ResetPassword = () => {
             )}
           />
 
-          <Button type="submit" className="w-full rounded-sm">
+          <Button
+            disabled={isLoading}
+            type="submit"
+            className="w-full rounded-sm"
+          >
             Submit
           </Button>
         </form>

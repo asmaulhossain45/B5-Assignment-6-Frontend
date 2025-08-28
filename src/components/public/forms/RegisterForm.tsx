@@ -51,9 +51,9 @@ const RegisterForm = ({ role }: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "user demo",
-      email: "userdemo@gmail.com",
-      password: "12345678",
+      name: "",
+      email: "",
+      password: "",
     },
   });
 
@@ -64,10 +64,12 @@ const RegisterForm = ({ role }: Props) => {
       if (role === Roles.USER) {
         await registerUser(data).unwrap();
         toast.success("User Register successful!", { id: toastId });
+        form.reset();
         navigate("/auth/login");
       } else if (role === Roles.AGENT) {
         await registerAgent(data).unwrap();
         toast.success("Agent Register successful!", { id: toastId });
+        form.reset();
         navigate("/auth/login");
       }
     } catch (err: unknown) {

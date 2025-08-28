@@ -1,7 +1,7 @@
 import { Roles } from "@/constants/Roles";
 import type { TCurrentUser } from "@/hooks/useCurrentUser";
 import { baseApi } from "@/redux/baseApi";
-import getRoleFromCookie from "@/utils/getRoleFromCookie";
+import { getRole } from "@/utils/role";
 
 type LoginPayload = {
   email: string;
@@ -24,6 +24,47 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["CURRENT_USER"],
     }),
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+      invalidatesTags: ["CURRENT_USER"],
+    }),
+    sendResetOtp: builder.mutation({
+      query: (data: { email: string }) => ({
+        url: "/auth/send-reset-otp",
+        method: "POST",
+        data: data,
+      }),
+    }),
+    verifyResetOtp: builder.mutation({
+      query: (data: { email: string; otp: string }) => ({
+        url: "/auth/verify-reset-otp",
+        method: "POST",
+        data: data,
+      }),
+    }),
+    resetPassword: builder.mutation({
+      query: (data: { email: string; otp: string; newPassword: string }) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        data: data,
+      }),
+    }),
+    sendVerifyOtp: builder.mutation<void, void>({
+      query: () => ({
+        url: "/auth/send-verify-otp",
+        method: "POST",
+      }),
+    }),
+    verifyAccount: builder.mutation({
+      query: (data: { otp: string }) => ({
+        url: "/auth/verify-account",
+        method: "POST",
+        data: data,
+      }),
+    }),
     registerUser: builder.mutation({
       query: (data: RegisterPayload) => ({
         url: "/auth/register/user",
@@ -38,22 +79,37 @@ export const authApi = baseApi.injectEndpoints({
         data: data,
       }),
     }),
-    logout: builder.mutation<void, void>({
-      query: () => ({
-        url: "/auth/logout",
+    registerAdmin: builder.mutation({
+      query: (data: RegisterPayload) => ({
+        url: "/auth/register/admin",
         method: "POST",
+        data: data,
       }),
-      invalidatesTags: ["CURRENT_USER"],
     }),
     getCurrentUser: builder.query<{ data: TCurrentUser }, void>({
       query: () => {
-        const role = getRoleFromCookie();
-        let url = `/users/me`;
-        if (role === Roles.AGENT) url = `/agents/me`;
-        else if (role === Roles.ADMIN || role === Roles.SUPER_ADMIN)
-          url = `/admins/me`;
+        const role = getRole();
 
-        return { url, method: "GET" };
+        let url = "";
+        switch (role) {
+          case Roles.USER:
+            url = "/users/me";
+            break;
+          case Roles.AGENT:
+            url = "/agents/me";
+            break;
+          case Roles.ADMIN:
+          case Roles.SUPER_ADMIN:
+            url = "/admins/me";
+            break;
+          default:
+            url = "";
+        }
+
+        return {
+          url,
+          method: "GET",
+        };
       },
       providesTags: ["CURRENT_USER"],
     }),
@@ -62,8 +118,18 @@ export const authApi = baseApi.injectEndpoints({
 
 export const {
   useLoginMutation,
+  useLogoutMutation,
+
+  useSendResetOtpMutation,
+  useVerifyResetOtpMutation,
+  useResetPasswordMutation,
+
+  useSendVerifyOtpMutation,
+  useVerifyAccountMutation,
+
   useRegisterUserMutation,
   useRegisterAgentMutation,
-  useLogoutMutation,
+  useRegisterAdminMutation,
+
   useGetCurrentUserQuery,
 } = authApi;

@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import type { TErrorResponse } from "@/types/ErrorResponse";
+import { setRole } from "@/utils/role";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
@@ -33,8 +34,8 @@ const LoginForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "demouser@gmail.com",
-      password: "123456789",
+      email: "",
+      password: "",
     },
   });
 
@@ -42,7 +43,8 @@ const LoginForm = () => {
     const toastId = toast.loading("Logging in...");
 
     try {
-      await login(credentials).unwrap();
+      const res = await login(credentials).unwrap();
+      setRole(res.data.role);
       form.reset();
       toast.success("Login successful!", { id: toastId });
       navige("/");

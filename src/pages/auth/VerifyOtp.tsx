@@ -13,6 +13,11 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import {
+  useVerifyAccountMutation,
+  useVerifyResetOtpMutation,
+} from "@/redux/features/auth/auth.api";
+import type { TErrorResponse } from "@/types/ErrorResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BadgeInfo, ChevronLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -21,13 +26,19 @@ import { toast } from "sonner";
 import z from "zod";
 
 const formSchema = z.object({
-  otp: z.string().min(6, { message: "OTP must be at least 6 characters" }),
+  otp: z.string().min(6, { message: "Please enter a valid OTP" }),
 });
 
 const VerifyOtp = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {email, action} = location.state;
+  const { action, email } = location.state || {};
+
+  const [verifyAccount, { isLoading: isVerifyLoading }] =
+    useVerifyAccountMutation();
+  const [verifyResetOtp, { isLoading: isResetLoading }] =
+    useVerifyResetOtpMutation();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,14 +46,33 @@ const VerifyOtp = () => {
     },
   });
 
-  console.log(email, action);
-
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const toastId = toast.loading("Verifying OTP...");
-    console.log(data);
-    form.reset();
-    toast.success("OTP verified successfully!", { id: toastId });
-    navigate("/auth/reset-password", { state: { email } });
+
+    console.log(action, email);
+
+    try {
+      if (action === "verifyAccount") {
+        await verifyAccount(data).unwrap();
+        toast.success("Account verified successfully!", { id: toastId });
+        form.reset();
+        navigate("/");
+      } else if (action === "resetPassword" && email) {
+        await verifyResetOtp({ email, otp: data.otp }).unwrap();
+        toast.success("Reset OTP verified successfully!", { id: toastId });
+        form.reset();
+        navigate("/auth/reset-password", {
+          state: { email: email, otp: data.otp },
+        });
+      } else {
+        toast.error("Invalid action!", { id: toastId });
+        navigate("/");
+      }
+    } catch (error) {
+      const err = error as { data: TErrorResponse };
+      const message = err?.data?.message || "Something went wrong!";
+      toast.error(message, { id: toastId });
+    }
   };
 
   return (
@@ -89,7 +119,11 @@ const VerifyOtp = () => {
             )}
           />
 
-          <Button type="submit" className="w-full rounded-sm">
+          <Button
+            disabled={isVerifyLoading || isResetLoading}
+            type="submit"
+            className="w-full rounded-sm"
+          >
             Verify
           </Button>
         </form>

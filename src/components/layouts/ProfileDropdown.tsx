@@ -14,9 +14,14 @@ import { LayoutDashboard, LogOut, ShieldX } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { CurrentUserAvatar } from "../ui/user-avatar";
-import { useLogoutMutation } from "@/redux/features/auth/auth.api";
+import {
+  useLogoutMutation,
+  useSendVerifyOtpMutation,
+} from "@/redux/features/auth/auth.api";
 import { useAppDispatch } from "@/redux/hook";
 import { baseApi } from "@/redux/baseApi";
+import type { TErrorResponse } from "@/types/ErrorResponse";
+import { removeRole } from "@/utils/role";
 
 interface Props {
   layout: "dashboard" | "public";
@@ -56,12 +61,13 @@ const ProfileDropdown = ({
   const [logout] = useLogoutMutation();
   const { currentUser } = useCurrentUser();
 
-  const email = currentUser?.email;
+  const [sendVerifyOtp, { isLoading: otpLoading }] = useSendVerifyOtpMutation();
 
   const handleLogout = async () => {
     const toastId = toast.loading("Logging out...");
     try {
       await logout().unwrap();
+      removeRole();
       dispatch(baseApi.util.resetApiState());
       toast.success("Logout successful!", { id: toastId });
       navigate("/auth/login");
@@ -70,11 +76,18 @@ const ProfileDropdown = ({
     }
   };
 
-  const handleVerifyAccount = () => {
-    toast.success("OTP sent successfully!");
-    navigate("/auth/verify-otp", {
-      state: { email: email, action: "verifyAccount" },
-    });
+  const handleVerifyAccount = async () => {
+    const toastId = toast.success("OTP sent successfully!");
+
+    try {
+      await sendVerifyOtp().unwrap();
+      toast.success("Verify OTP sent successfully!", { id: toastId });
+      navigate("/auth/verify-otp", { state: { action: "verifyAccount" } });
+    } catch (error) {
+      const err = error as { data: TErrorResponse };
+      const message = err?.data?.message || "Something went wrong!";
+      toast.error(message, { id: toastId });
+    }
   };
 
   return (
@@ -96,7 +109,7 @@ const ProfileDropdown = ({
         <DropdownMenuGroup>
           {dropdownLinks[layout].map((item, index) => (
             <DropdownMenuItem key={index}>
-              <NavLink to={item.path} className={cn("flex items-center gap-2")}>
+              <NavLink to={item.path} className={cn("w-full flex items-center gap-2")}>
                 <item.icon size={16} />
                 <span>{item.label}</span>
               </NavLink>
@@ -105,7 +118,7 @@ const ProfileDropdown = ({
         </DropdownMenuGroup>
 
         {!currentUser?.isVerified && (
-          <DropdownMenuItem onClick={handleVerifyAccount}>
+          <DropdownMenuItem onClick={handleVerifyAccount} disabled={otpLoading}>
             <ShieldX size={16} />
             <span>Verify Account</span>
           </DropdownMenuItem>

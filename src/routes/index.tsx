@@ -9,18 +9,18 @@ const DashboardLayout = lazy(
   () => import("@/components/layouts/DashboardLayout")
 );
 
-import { publicRoutes } from "./publicRoutes";
+import { getRole } from "@/utils/role";
+import { Roles } from "@/constants/Roles";
 import { authRoutes } from "./authRoutes";
 import { userRoutes } from "./userRoutes";
 import { agentRoutes } from "./agentRoutes";
 import { adminRoutes } from "./adminRoutes";
+import { publicRoutes } from "./publicRoutes";
 import { superAdminRoutes } from "./superAdminRoutes";
-import getRoleFromCookie from "@/utils/getRoleFromCookie";
-import { Roles } from "@/constants/Roles";
 import { generateRoutes } from "@/utils/generateRoutes";
 
 export const dashboardRedirect = () => {
-  const userRole: Roles | null = getRoleFromCookie();
+  const userRole: Roles | null = getRole();
 
   if (!userRole) return redirect("/auth/login");
 

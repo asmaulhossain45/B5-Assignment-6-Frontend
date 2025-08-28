@@ -1,5 +1,7 @@
 import type { Roles } from "@/constants/Roles";
 import { useGetCurrentUserQuery } from "@/redux/features/auth/auth.api";
+import { getRole } from "@/utils/role";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export type TCurrentUser = {
   name: string;
@@ -14,11 +16,9 @@ export type TCurrentUser = {
 };
 
 export const useCurrentUser = () => {
-  const { data, isLoading, isError, error, refetch } = useGetCurrentUserQuery(
-    undefined,
-    {
-      refetchOnMountOrArgChange: true,
-    }
+  const role: Roles | null = getRole();
+  const { data, isLoading, isError, error } = useGetCurrentUserQuery(
+    role ? undefined : skipToken
   );
 
   return {
@@ -27,6 +27,5 @@ export const useCurrentUser = () => {
     userLoading: isLoading,
     userError: isError,
     userErrorData: error,
-    refetchCurrentUser: refetch,
   };
 };

@@ -21,6 +21,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useLogoutMutation } from "@/redux/features/auth/auth.api";
 import { baseApi } from "@/redux/baseApi";
 import { useAppDispatch } from "@/redux/hook";
+import { removeRole } from "@/utils/role";
 
 interface Props {
   navlinks: { path: string; label: string }[];
@@ -38,6 +39,7 @@ const MobileMenu = ({ children, navlinks }: Props) => {
     const toastId = toast.loading("Logging out...");
     try {
       await logout().unwrap();
+      removeRole();
       dispatch(baseApi.util.resetApiState());
       toast.success("Logout successful!", { id: toastId });
       navigate("/auth/login");
@@ -79,7 +81,7 @@ const MobileMenu = ({ children, navlinks }: Props) => {
         <DrawerFooter>
           {!currentUser && (
             <Button>
-              <Link to="/auth/login">Login</Link>
+              <Link to="/auth/login" className="w-full">Login</Link>
             </Button>
           )}
 

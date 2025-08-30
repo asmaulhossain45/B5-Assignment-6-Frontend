@@ -1,46 +1,59 @@
 import { Roles } from "@/constants/Roles";
+import AdminOverview from "@/pages/admin/AdminOverview";
+import AdminProfile from "@/pages/admin/AdminProfile";
+import ManageAgents from "@/pages/admin/ManageAgents";
+import ManageUsers from "@/pages/admin/ManageUsers";
+import ProfileManagement from "@/pages/admin/ProfileManagement";
+import TransactionHistory from "@/pages/admin/TransactionHistory";
 import type { TRoute } from "@/types/TRoute";
-import { CreditCard, Home, HomeIcon, User, UserCheck, UserCog, Users } from "lucide-react";
+import {
+  CreditCard,
+  HomeIcon,
+  User,
+  UserCheck,
+  UserCog,
+  Users,
+} from "lucide-react";
 
 export const adminRoutes: TRoute[] = [
   {
     icon: HomeIcon,
-    Component: Home,
+    Component: AdminOverview,
     label: "Overview",
     path: "admin/overview",
     roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
   },
-    {
+  {
     icon: User,
-    Component: Home,
+    Component: AdminProfile,
     label: "Profile",
     path: "admin/profile",
     roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
   },
   {
     icon: Users,
-    Component: Home,
+    Component: ManageUsers,
     label: "Manage Users",
     path: "admin/manage-users",
     roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
   },
   {
     icon: UserCheck,
-    Component: Home,
+    Component: ManageAgents,
     label: "Manage Agents",
     path: "admin/manage-agents",
     roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
   },
   {
     icon: CreditCard,
-    Component: Home,
-    label: "Transactions",
+    Component: TransactionHistory,
+    label: "Transactions History",
     path: "admin/transactions",
     roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
   },
   {
     icon: UserCog,
-    Component: Home,
+    Component: ProfileManagement,
     label: "Profile Management",
     path: "admin/profile-management",
     roles: [Roles.ADMIN, Roles.SUPER_ADMIN],

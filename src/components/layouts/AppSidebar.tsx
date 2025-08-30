@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
+  useSidebar,
 } from "../ui/sidebar";
 import Logo from "@/assets/brand/Logo.png";
 import { X } from "lucide-react";
@@ -19,12 +20,11 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { CurrentUserAvatar } from "../ui/user-avatar";
 import { getSidebarItme } from "@/utils/getSidebarItem";
 
-
 const AppSidebar = () => {
-  const {userRole} = useCurrentUser();
-  const routes: TRoute[] = getSidebarItme(userRole)
+  const { currentUser, userRole } = useCurrentUser();
+  const routes: TRoute[] = getSidebarItme(userRole);
   const pathname = useLocation().pathname;
-  const {currentUser} = useCurrentUser();
+  const { setOpenMobile } = useSidebar();
 
   return (
     <Sidebar>
@@ -46,7 +46,10 @@ const AppSidebar = () => {
               {routes.map((route, index) => {
                 const isActive = pathname === `/dashboard/${route.path}`;
                 return (
-                  <SidebarMenuItem key={index}>
+                  <SidebarMenuItem
+                    key={index}
+                    onClick={() => setOpenMobile(false)}
+                  >
                     <SidebarMenuButton asChild size={"lg"} isActive={isActive}>
                       <NavLink to={route.path as string}>
                         <route.icon />
@@ -62,7 +65,7 @@ const AppSidebar = () => {
       </SidebarContent>
 
       <SidebarFooter className="flex flex-row items-center gap-2 overflow-hidden">
-        <CurrentUserAvatar/>
+        <CurrentUserAvatar />
 
         <div className="space-y-[2px]">
           <h6 className="text-sm font-semibold capitalize line-clamp-1">

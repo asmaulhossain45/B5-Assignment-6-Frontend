@@ -8,7 +8,7 @@ const Topbar = () => {
   return (
     <header
       className={cn(
-        "flex items-center justify-between",
+        "sticky top-0 flex items-center justify-between",
         "bg-sidebar py-3 border-b px-4 md:px-8"
       )}
     >

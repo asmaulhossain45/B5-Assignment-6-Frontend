@@ -1,4 +1,4 @@
-import LoginForm from "@/components/public/forms/LoginForm";
+import LoginForm from "@/components/forms/LoginForm";
 import { LogIn } from "lucide-react";
 import { Link } from "react-router";
 

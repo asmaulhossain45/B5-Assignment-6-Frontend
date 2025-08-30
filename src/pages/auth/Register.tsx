@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import RegisterForm from "@/components/public/forms/RegisterForm";
+import RegisterForm from "@/components/forms/RegisterForm";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Link } from "react-router";

@@ -1,6 +1,6 @@
 import AppSection from "../common/AppSection";
 import SectionHeading from "../common/SectionHeading";
-import ContactForm from "../forms/ContactForm";
+import ContactForm from "../../forms/ContactForm";
 
 type Props = {
   bgColor?: boolean;

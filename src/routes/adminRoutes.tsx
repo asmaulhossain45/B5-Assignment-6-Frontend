@@ -1,4 +1,4 @@
-import { Roles } from "@/constants/Roles";
+import { Roles } from "@/constants/enums";
 import AdminOverview from "@/pages/admin/AdminOverview";
 import AdminProfile from "@/pages/admin/AdminProfile";
 import ManageAgents from "@/pages/admin/ManageAgents";

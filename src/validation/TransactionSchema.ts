@@ -1,4 +1,5 @@
-import { TransactionType } from "@/constants/TransactionType";
+
+import { TransactionType } from "@/constants/enums";
 import z from "zod";
 
 export const TransactionSchema = z.object({

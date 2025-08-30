@@ -1,26 +1,24 @@
-import { Outlet } from "react-router";
-import { SidebarProvider } from "../ui/sidebar";
 import Topbar from "./Topbar";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
-import Loading from "@/pages/public/Loading";
+import { Outlet } from "react-router";
 import AppSidebar from "./AppSidebar";
+import Loading from "@/pages/public/Loading";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 
 const DashboardLayout = () => {
   const { userLoading } = useCurrentUser();
 
-  if (userLoading) return <Loading type="page" size="lg" />;
+if (userLoading) return <Loading type="page" size="lg" />
 
   return (
-    <SidebarProvider>
-      <div className="flex w-full min-h-screen">
-        <AppSidebar />
-        <div className="flex-1 flex flex-col">
-          <Topbar />
-          <main className="p-4 pb-0 md:p-8 md:pb-0 flex-1">
-            <Outlet />
-          </main>
-        </div>
-      </div>
+    <SidebarProvider className="w-full">
+      <AppSidebar />
+      <SidebarInset>
+        <Topbar />
+        <main className="flex flex-1 flex-col p-4 md:p-6 min-h-[calc(100vh-65px)]">
+          <Outlet />
+        </main>
+      </SidebarInset>
     </SidebarProvider>
   );
 };

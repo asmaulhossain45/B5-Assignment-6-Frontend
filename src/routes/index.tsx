@@ -10,7 +10,6 @@ const DashboardLayout = lazy(
 );
 
 import { getRole } from "@/utils/role";
-import { Roles } from "@/constants/Roles";
 import { authRoutes } from "./authRoutes";
 import { userRoutes } from "./userRoutes";
 import { agentRoutes } from "./agentRoutes";
@@ -18,6 +17,7 @@ import { adminRoutes } from "./adminRoutes";
 import { publicRoutes } from "./publicRoutes";
 import { superAdminRoutes } from "./superAdminRoutes";
 import { generateRoutes } from "@/utils/generateRoutes";
+import { Roles } from "@/constants/enums";
 
 export const dashboardRedirect = () => {
   const userRole: Roles | null = getRole();

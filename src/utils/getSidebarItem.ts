@@ -1,4 +1,4 @@
-import { Roles } from "@/constants/Roles";
+import { Roles } from "@/constants/enums";
 import { adminRoutes } from "@/routes/adminRoutes";
 import { agentRoutes } from "@/routes/agentRoutes";
 import { superAdminRoutes } from "@/routes/superAdminRoutes";

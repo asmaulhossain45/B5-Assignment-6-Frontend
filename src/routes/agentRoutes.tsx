@@ -1,4 +1,4 @@
-import { Roles } from "@/constants/Roles";
+import { Roles } from "@/constants/enums";
 import AgentAddMoney from "@/pages/agent/AgentAddMoney";
 import AgentCommission from "@/pages/agent/AgentCommission";
 import AgentOverview from "@/pages/agent/AgentOverview";

@@ -1,4 +1,4 @@
-import { Roles } from "@/constants/Roles";
+import { Roles } from "@/constants/enums";
 import type { TCurrentUser } from "@/hooks/useCurrentUser";
 import { baseApi } from "@/redux/baseApi";
 import { getRole } from "@/utils/role";

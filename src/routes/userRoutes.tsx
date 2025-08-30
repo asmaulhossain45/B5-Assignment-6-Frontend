@@ -1,4 +1,3 @@
-import { Roles } from "@/constants/Roles";
 import type { TRoute } from "@/types/TRoute";
 import UserOverview from "@/pages/user/UserOverview";
 import UserProfile from "@/pages/user/UserProfile";
@@ -16,6 +15,7 @@ import {
   User,
   UserCog,
 } from "lucide-react";
+import { Roles } from "@/constants/enums";
 
 export const userRoutes: TRoute[] = [
   {

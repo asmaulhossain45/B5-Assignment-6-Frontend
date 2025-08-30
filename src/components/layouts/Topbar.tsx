@@ -18,7 +18,7 @@ const Topbar = () => {
         <ThemeToggle />
 
         <ProfileDropdown layout="dashboard" className="mt-4">
-          <CurrentUserAvatar/>
+          <CurrentUserAvatar />
         </ProfileDropdown>
       </div>
     </header>

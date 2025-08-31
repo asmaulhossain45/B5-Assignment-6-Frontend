@@ -1,4 +1,4 @@
-import type { Roles } from "@/constants/Roles";
+import type { Roles } from "@/constants/enums";
 import { useGetCurrentUserQuery } from "@/redux/features/auth/auth.api";
 import { getRole } from "@/utils/role";
 import { skipToken } from "@reduxjs/toolkit/query";

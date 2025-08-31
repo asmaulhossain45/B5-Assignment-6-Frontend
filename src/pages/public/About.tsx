@@ -1,8 +1,9 @@
-import PageHeader from "@/components/public/common/PageHeader";
-import AboutUs from "@/components/public/sections/AboutUs";
-import OurTeam from "@/components/public/sections/OurTeam";
-import Product from "@/components/public/sections/Product";
-import WhyChooseUs from "@/components/public/sections/WhyChooseUs";
+import PageHeader from "@/components/common/PageHeader";
+import AboutUs from "@/components/sections/AboutUs";
+import OurTeam from "@/components/sections/OurTeam";
+import Product from "@/components/sections/Product";
+import WhyChooseUs from "@/components/sections/WhyChooseUs";
+
 
 const About = () => {
   return (

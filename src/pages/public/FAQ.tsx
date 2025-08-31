@@ -1,6 +1,7 @@
-import PageHeader from "@/components/public/common/PageHeader";
-import FAQs from "@/components/public/sections/FAQs";
-import Product from "@/components/public/sections/Product";
+import PageHeader from "@/components/common/PageHeader";
+import FAQs from "@/components/sections/FAQs";
+import Product from "@/components/sections/Product";
+
 
 const FAQ = () => {
   return (

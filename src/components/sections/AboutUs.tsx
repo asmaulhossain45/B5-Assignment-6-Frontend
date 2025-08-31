@@ -1,9 +1,9 @@
 import { Headset, Smartphone } from "lucide-react";
-import AppSection from "../common/AppSection";
 import SectionHeading from "../common/SectionHeading";
 import type { ElementType } from "react";
 import { cn } from "@/lib/utils";
 import MockupImage2 from "@/assets/mockup/2.png";
+import AppSection from "../common/AppSection";
 
 type Props = {
   bgColor?: boolean;

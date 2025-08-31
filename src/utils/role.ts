@@ -1,4 +1,4 @@
-import type { Roles } from "@/constants/Roles";
+import type { Roles } from "@/constants/enums";
 
 const ROLE_KEY = "role";
 

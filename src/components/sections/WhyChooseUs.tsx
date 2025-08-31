@@ -1,10 +1,10 @@
 import { Layers } from "lucide-react";
-import AppSection from "../common/AppSection";
 import SectionHeading from "../common/SectionHeading";
 
 import mockup_3 from "@/assets/mockup/3.png";
 import manPose1 from "@/assets/images/Man_Pose_1.png";
 import { cn } from "@/lib/utils";
+import AppSection from "../common/AppSection";
 
 type Props = {
   bgColor?: boolean;

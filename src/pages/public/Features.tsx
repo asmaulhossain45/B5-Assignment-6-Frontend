@@ -1,7 +1,8 @@
-import PageHeader from "@/components/public/common/PageHeader";
-import FAQs from "@/components/public/sections/FAQs";
-import KeyFeatures from "@/components/public/sections/KeyFeatures";
-import WhyChooseUs from "@/components/public/sections/WhyChooseUs";
+import PageHeader from "@/components/common/PageHeader";
+import FAQs from "@/components/sections/FAQs";
+import KeyFeatures from "@/components/sections/KeyFeatures";
+import WhyChooseUs from "@/components/sections/WhyChooseUs";
+
 
 const Features = () => {
   return (

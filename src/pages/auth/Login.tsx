@@ -1,3 +1,4 @@
+import FormHeader from "@/components/common/FormHeader";
 import LoginForm from "@/components/forms/LoginForm";
 import { LogIn } from "lucide-react";
 import { Link } from "react-router";
@@ -5,17 +6,13 @@ import { Link } from "react-router";
 const Login = () => {
   return (
     <div className="max-w-96 bg-section p-6 rounded-xl space-y-7 border shadow-md">
-      <div className="flex flex-col items-center">
-        <div className="bg-background p-3 rounded-lg shadow-md">
-          <LogIn size={24} />
-        </div>
-
-        <h4 className="text-lg font-bold mt-4 mb-1">Sign in with email</h4>
-
-        <p className="description text-center">
-          Enter your email address and password to securely access your account.
-        </p>
-      </div>
+      <FormHeader
+        Icon={LogIn}
+        title="Sign in with email"
+        description={
+          "Enter your email address and password to securely access your account."
+        }
+      />
 
       <LoginForm />
 

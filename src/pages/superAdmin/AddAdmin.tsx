@@ -1,5 +1,5 @@
+import FormHeader from "@/components/common/FormHeader";
 import RegisterAdminForm from "@/components/forms/RegisterAdminForm";
-import FormHeader from "@/components/public/common/FormHeader";
 import { ShieldUser } from "lucide-react";
 
 const AddAdmin = () => {

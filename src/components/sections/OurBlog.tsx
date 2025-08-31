@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import AppSection from "../common/AppSection";
 import SectionHeading from "../common/SectionHeading";
 import { Link } from "react-router";
 import BlogCard from "../cards/BlogCard";
@@ -7,6 +6,7 @@ import BlogCard from "../cards/BlogCard";
 import businessMan1 from "@/assets/images/Business_Man_1.jpg"
 import businessWoman1 from "@/assets/images/Business_Woman_1.jpg"
 import gamesCelebration1 from "@/assets/images/Games_Celebration_1.jpg"
+import AppSection from "../common/AppSection";
 
 type Props = {
   bgColor?: boolean;

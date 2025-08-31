@@ -1,6 +1,7 @@
-import PageHeader from "@/components/public/common/PageHeader";
-import FAQs from "@/components/public/sections/FAQs";
-import PricingPlan from "@/components/public/sections/PricingPlan";
+import PageHeader from "@/components/common/PageHeader";
+import FAQs from "@/components/sections/FAQs";
+import PricingPlan from "@/components/sections/PricingPlan";
+
 
 const Pricing = () => {
   return (

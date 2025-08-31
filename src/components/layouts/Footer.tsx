@@ -1,10 +1,10 @@
 import { Link } from "react-router";
-import AppSection from "../public/common/AppSection";
 import { ChevronRight, Headset, Mail, MapPin, Phone } from "lucide-react";
 import type { ElementType } from "react";
 import Logo from "@/assets/brand/Logo.png";
 import NewsletterImage from "@/assets/images/Business_Woman_1.jpg";
 import { Button } from "../ui/button";
+import AppSection from "../common/AppSection";
 
 interface FooterLink {
   heading: string;

@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
-import AppSection from "../common/AppSection";
 import SectionHeading from "../common/SectionHeading";
 import type { ElementType } from "react";
 import { Wallet } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import mockup_4 from "@/assets/mockup/4.png";
+import AppSection from "../common/AppSection";
 
 type Props = {
   bgColor?: boolean;

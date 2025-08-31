@@ -1,5 +1,6 @@
-import PageHeader from "@/components/public/common/PageHeader";
-import ContactUs from "@/components/public/sections/ContactUs";
+import PageHeader from "@/components/common/PageHeader";
+import ContactUs from "@/components/sections/ContactUs";
+
 
 const Contact = () => {
   return (

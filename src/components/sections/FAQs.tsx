@@ -4,10 +4,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import AppSection from "../common/AppSection";
+
 import SectionHeading from "../common/SectionHeading";
 
 import businessMan1 from "@/assets/images/Business_Man_1.jpg";
+import AppSection from "../common/AppSection";
 
 type Props = {
   bgColor?: boolean;

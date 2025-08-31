@@ -1,5 +1,4 @@
 import type { ElementType } from "react";
-import AppSection from "../common/AppSection";
 import {
   Dribbble,
   Facebook,
@@ -15,6 +14,7 @@ import member3 from "@/assets/avatar/pic_3.jpg";
 import member4 from "@/assets/avatar/pic_4.jpg";
 import SectionHeading from "../common/SectionHeading";
 import MemberCard from "../cards/MemberCard";
+import AppSection from "../common/AppSection";
 
 type Props = {
   bgColor?: boolean;

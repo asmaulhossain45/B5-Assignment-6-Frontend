@@ -1,10 +1,10 @@
-import AppSection from "../common/AppSection";
 import HeroImage from "@/assets/mockup/1.png";
 import HeroImage2 from "@/assets/images/Activities.png";
 import AvatarGroup from "@/components/common/AvatarGroup";
 import RatingGroup from "@/components/common/RatingGroup";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
+import AppSection from "../common/AppSection";
 
 const HomeHero = () => {
   return (

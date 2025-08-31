@@ -1,4 +1,4 @@
-import type { Roles } from "@/constants/Roles";
+import type { Roles } from "@/constants/enums";
 import type { ComponentType, ElementType } from "react";
 
 export type TRoute = {

@@ -1,9 +1,9 @@
 import { type ElementType } from "react";
-import AppSection from "../common/AppSection";
 import { Button } from "@/components/ui/button";
 import SectionHeading from "../common/SectionHeading";
 import { BookAudio, CreditCard, MonitorStop, Receipt } from "lucide-react";
 import { cn } from "@/lib/utils";
+import AppSection from "../common/AppSection";
 
 type Props = {
   bgColor?: boolean;

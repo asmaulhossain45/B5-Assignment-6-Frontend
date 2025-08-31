@@ -2,13 +2,13 @@ import { Link, NavLink } from "react-router";
 import Logo from "@/assets/brand/Logo.png";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import AppSection from "../public/common/AppSection";
 import { ThemeToggle } from "../common/ThemeToggle";
 import MobileMenu from "./MobileMenu";
 import ProfileDropdown from "./ProfileDropdown";
 import { Menu } from "lucide-react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { CurrentUserAvatar } from "../ui/user-avatar";
+import AppSection from "../common/AppSection";
 
 const navLinks = [
   { path: "/", label: "Home" },

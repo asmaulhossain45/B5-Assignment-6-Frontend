@@ -1,4 +1,3 @@
-import AppSection from "../common/AppSection";
 import SectionHeading from "../common/SectionHeading";
 
 import avatar1 from "@/assets/avatar/pic_1.jpg";
@@ -6,6 +5,7 @@ import avatar2 from "@/assets/avatar/pic_2.jpg";
 import avatar3 from "@/assets/avatar/pic_3.jpg";
 import avatar4 from "@/assets/avatar/pic_4.jpg";
 import TestimonialCard from "../cards/TestimonialCard";
+import AppSection from "../common/AppSection";
 
 type Props = {
   bgColor?: boolean;

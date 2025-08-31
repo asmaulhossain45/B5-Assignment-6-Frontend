@@ -1,9 +1,9 @@
 import z from "zod";
 import { CreditCard } from "lucide-react";
-import FormHeader from "@/components/public/common/FormHeader";
 import TransactionForm from "@/components/forms/TransactionForm";
 import { TransactionSchema } from "@/validation/TransactionSchema";
 import { toast } from "sonner";
+import FormHeader from "@/components/common/FormHeader";
 
 const handleWithdraw = (data: z.infer<typeof TransactionSchema>) => {
   console.log(data);

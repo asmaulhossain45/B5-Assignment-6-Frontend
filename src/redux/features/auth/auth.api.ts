@@ -85,6 +85,7 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         data: data,
       }),
+      invalidatesTags: ["ADMINS"],
     }),
     getCurrentUser: builder.query<{ data: TCurrentUser }, void>({
       query: () => {

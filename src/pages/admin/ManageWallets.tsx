@@ -1,14 +1,14 @@
 import { useListTableParams } from "@/hooks/useListTableParams";
 import { ListTable, type SortOption } from "@/components/table/ListTable";
-import { useGetTransactionListQuery } from "@/redux/features/admin/admin.api";
-import useTransactionColumns from "@/hooks/useTransactionColumns";
+import { useGetWalletListQuery } from "@/redux/features/admin/admin.api";
+import useWalletColumns from "@/hooks/useWalletColumns";
 
 const sortOptions: SortOption[] = [
   { label: "Name", value: "name" },
   { label: "Created At", value: "createdAt" },
 ];
 
-const TransactionHistory = () => {
+const ManageWallets = () => {
   const {
     params,
     searchInput,
@@ -19,8 +19,8 @@ const TransactionHistory = () => {
     sortOrder,
     page,
   } = useListTableParams();
-  const { data, isLoading } = useGetTransactionListQuery(params);
-  const { columns } = useTransactionColumns();
+  const { data, isLoading } = useGetWalletListQuery(params);
+  const { columns } = useWalletColumns();
 
   console.log(data?.data);
 
@@ -44,4 +44,4 @@ const TransactionHistory = () => {
   );
 };
 
-export default TransactionHistory;
+export default ManageWallets;

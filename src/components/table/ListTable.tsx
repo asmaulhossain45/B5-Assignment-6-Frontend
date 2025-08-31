@@ -50,14 +50,13 @@ interface ListTableProps<TData, TValue> {
 
   page?: number;
   setPage?: (page: number) => void;
-  limit?: number;
 }
 
 export const ListTable = <TData, TValue>({
   columns,
   data,
   isLoading = true,
-  meta = { page: 1, limit: 10, totalPage: 1 },
+  meta,
 
   searchInput,
   setSearchInput,
@@ -101,17 +100,17 @@ export const ListTable = <TData, TValue>({
         />
         <div className="flex items-center gap-2">
           <Select value={sortBy} onValueChange={handleSortChange}>
-            <SelectTrigger className="w-full rounded-none bg-sidebar dark:bg-sidebar">
+            <SelectTrigger className="w-full lg:w-44 rounded-none bg-sidebar dark:bg-sidebar">
               {sortBy ? (
                 sortOptions?.find((option) => option.value === sortBy)?.label
               ) : (
-                <span className="text-muted-foreground">Select a field</span>
+                <span className="text-muted-foreground">Sort by field</span>
               )}
             </SelectTrigger>
 
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Select a field</SelectLabel>
+                <SelectLabel>Select a field to sort</SelectLabel>
                 {sortOptions?.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
@@ -123,7 +122,7 @@ export const ListTable = <TData, TValue>({
 
           <Button
             variant={"outline"}
-            className="rounded-none bg-sidebar"
+            className="rounded-none bg-sidebar dark:bg-sidebar"
             onClick={toggleSortOrder}
           >
             <ListFilter
@@ -164,7 +163,7 @@ export const ListTable = <TData, TValue>({
               <TableRow key={index}>
                 {columns.map((_, idx) => (
                   <TableCell key={idx}>
-                    <Skeleton className="h-10 rounded" />
+                    <Skeleton className="h-11 rounded" />
                   </TableCell>
                 ))}
               </TableRow>

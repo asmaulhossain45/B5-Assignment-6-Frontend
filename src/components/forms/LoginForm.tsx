@@ -27,7 +27,7 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
-  const navige = useNavigate();
+  const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -47,7 +47,7 @@ const LoginForm = () => {
       setRole(res.data.role);
       form.reset();
       toast.success("Login successful!", { id: toastId });
-      navige("/");
+      navigate("/");
     } catch (err: unknown) {
       const error = err as { data: TErrorResponse };
       toast.error(error?.data?.message || "Login failed!", { id: toastId });

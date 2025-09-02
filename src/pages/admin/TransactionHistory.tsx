@@ -22,8 +22,6 @@ const TransactionHistory = () => {
   const { data, isLoading } = useGetTransactionListQuery(params);
   const { columns } = useTransactionColumns();
 
-  console.log(data?.data);
-
   return (
     <>
       <ListTable

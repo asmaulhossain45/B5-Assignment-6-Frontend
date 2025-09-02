@@ -1,38 +1,34 @@
 import { baseApi } from "@/redux/baseApi";
-import type { AppResponse } from "@/types/AppResponse";
-import type { IWallet } from "@/types/IWallet";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getUserProfile: builder.query({
+    getAgentProfile: builder.query({
       query: (params) => ({
-        url: "/users/me",
+        url: "/agents/me",
         method: "GET",
         params,
       }),
       providesTags: ["CURRENT_USER"],
     }),
-
-    getUserWallet: builder.query<AppResponse<IWallet>, void>({
-      query: () => ({
-        url: "/users/wallet",
+    getAgentWallet: builder.query({
+      query: (params) => ({
+        url: "/agents/wallet",
         method: "GET",
+        params,
       }),
       providesTags: ["WALLETS"],
     }),
-
-    getUserTransaction: builder.query({
+    getAgentTransaction: builder.query({
       query: (params) => ({
-        url: "users/transactions",
+        url: "agents/transactions",
         method: "GET",
         params,
       }),
       providesTags: ["TRANSACTIONS"],
     }),
-
-    updateUserProfile: builder.mutation({
+    updateAgentProfile: builder.mutation({
       query: (data) => ({
-        url: `/users/me`,
+        url: `/agents/me`,
         method: "PATCH",
         data: data,
       }),
@@ -42,8 +38,8 @@ export const userApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useGetUserProfileQuery,
-  useGetUserWalletQuery,
-  useGetUserTransactionQuery,
-  useUpdateUserProfileMutation,
+  useGetAgentProfileQuery,
+  useGetAgentWalletQuery,
+  useGetAgentTransactionQuery,
+  useUpdateAgentProfileMutation,
 } = userApi;

@@ -18,7 +18,7 @@ export const CurrentUserAvatar = ({ className }: Props) => {
       >
         <AvatarImage
           src="https://github.com/shadcn.png"
-          className="rounded-full"
+          className="object-cover rounded-full"
         />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>

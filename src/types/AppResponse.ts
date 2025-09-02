@@ -1,4 +1,4 @@
-export type AppResponse<T=unknown> = {
+export type AppResponse<T = unknown> = {
   success: boolean;
   message: string;
   statusCode?: number;

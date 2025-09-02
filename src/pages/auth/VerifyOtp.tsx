@@ -1,3 +1,4 @@
+import FormHeader from "@/components/common/FormHeader";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -77,17 +78,11 @@ const VerifyOtp = () => {
 
   return (
     <div className="max-w-96 bg-section p-6 rounded-xl space-y-7 border shadow-md">
-      <div className="flex flex-col items-center">
-        <div className="bg-background p-3 rounded-lg shadow-md">
-          <BadgeInfo size={24} />
-        </div>
-
-        <h4 className="text-lg font-bold mt-4 mb-1">Verify OTP</h4>
-
-        <p className="description text-center">
-          Check your email and enter the OTP to verify your account.
-        </p>
-      </div>
+      <FormHeader
+        Icon={BadgeInfo}
+        title="Verify OTP"
+        description="Check your email and enter the OTP to verify your account."
+      />
 
       <Form {...form}>
         <form

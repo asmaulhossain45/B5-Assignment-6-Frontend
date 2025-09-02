@@ -1,3 +1,4 @@
+import FormHeader from "@/components/common/FormHeader";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { useResetPasswordMutation } from "@/redux/features/auth/auth.api";
 import type { TErrorResponse } from "@/types/ErrorResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, Eye, EyeOff, ShieldEllipsis } from "lucide-react";
+import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
@@ -71,17 +72,13 @@ const ResetPassword = () => {
 
   return (
     <div className="max-w-96 bg-section p-6 rounded-xl space-y-7 border shadow-md">
-      <div className="flex flex-col items-center">
-        <div className="bg-background p-3 rounded-lg shadow-md">
-          <ShieldEllipsis size={24} />
-        </div>
-
-        <h4 className="text-lg font-bold mt-4 mb-1">Reset Password?</h4>
-
-        <p className="description text-center">
-          Enter new password and confirm password to reset your password.
-        </p>
-      </div>
+      <FormHeader
+        Icon={ChevronLeft}
+        title="Reset Password"
+        description={
+          "Enter new password and confirm password to reset your password."
+        }
+      />
 
       <Form {...form}>
         <form

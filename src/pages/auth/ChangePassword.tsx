@@ -1,3 +1,4 @@
+import FormHeader from "@/components/common/FormHeader";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, Eye, EyeOff, RotateCcwKey } from "lucide-react";
+import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
@@ -20,9 +21,7 @@ import z from "zod";
 
 const formSchema = z
   .object({
-    currentPassword: z
-      .string()
-      .min(8, { message: "Invalid password" }),
+    currentPassword: z.string().min(8, { message: "Invalid password" }),
     newPassword: z
       .string()
       .min(8, { message: "Password must be at least 8 characters" }),
@@ -63,17 +62,13 @@ const ChangePassword = () => {
 
   return (
     <div className="max-w-96 bg-section p-6 rounded-xl space-y-7 border shadow-md">
-      <div className="flex flex-col items-center">
-        <div className="bg-background p-3 rounded-lg shadow-md">
-          <RotateCcwKey size={24} />
-        </div>
-
-        <h4 className="text-lg font-bold mt-4 mb-1">Change Password?</h4>
-
-        <p className="description text-center">
-          Enter your current password and new password to change your password.
-        </p>
-      </div>
+      <FormHeader
+        Icon={ChevronLeft}
+        title="Change Password?"
+        description={
+          "Enter your current password and new password to change your password."
+        }
+      />
 
       <Form {...form}>
         <form

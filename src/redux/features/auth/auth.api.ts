@@ -1,6 +1,6 @@
 import { Roles } from "@/constants/enums";
-import type { TCurrentUser } from "@/hooks/useCurrentUser";
 import { baseApi } from "@/redux/baseApi";
+import type { IAccount } from "@/types/IAccount";
 import { getRole } from "@/utils/role";
 
 type LoginPayload = {
@@ -87,7 +87,7 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["ADMINS"],
     }),
-    getCurrentUser: builder.query<{ data: TCurrentUser }, void>({
+    getCurrentUser: builder.query<{ data: IAccount }, void>({
       query: () => {
         const role = getRole();
 

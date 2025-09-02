@@ -5,11 +5,16 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { TransactionStatus } from "@/constants/enums";
+import { cn } from "@/lib/utils";
 import type { ITransaction } from "@/types/ITransaction";
 import type { ColumnDef } from "@tanstack/react-table";
 
-// role (Admin)
-const useTransactionColumns = () => {
+type Props = {
+  currentUser?: string;
+};
+
+const useTransactionColumns = ({ currentUser = "" }: Props = {}) => {
   const columns: ColumnDef<ITransaction>[] = [
     {
       header: "Serial",
@@ -19,38 +24,38 @@ const useTransactionColumns = () => {
     {
       header: "Sender",
       accessorKey: "from.name",
-      cell: ({ row }) => (
-        <>
-          <span className="font-medium">{row.original.from?.name}</span> <br />
-          <span className="text-xs text-muted-foreground">
-            {row.original.from?.email}
-          </span>
-        </>
-      ),
+      cell: ({ row }) => {
+        const { name, email } = row.original?.from ?? {};
+        const isUser = currentUser === email;
+
+        return (
+          <>
+            <span className={cn("font-medium", isUser && "text-primary")}>
+              {name}
+            </span>
+            <br />
+            <span className="text-xs text-muted-foreground">{email}</span>
+          </>
+        );
+      },
     },
     {
       header: "Receiver",
       accessorKey: "to.name",
-      cell: ({ row }) => (
-        <>
-          <span className="font-medium">{row.original.to?.name}</span> <br />
-          <span className="text-xs text-muted-foreground">
-            {row.original.to?.email}
-          </span>
-        </>
-      ),
-    },
-    {
-      header: "Agent",
-      accessorKey: `agent.name`,
-      cell: ({ row }) => (
-        <>
-          <span className="font-medium">{row.original.agent?.name}</span> <br />
-          <span className="text-xs text-muted-foreground">
-            {row.original.agent?.email}
-          </span>
-        </>
-      ),
+      cell: ({ row }) => {
+        const { name, email } = row.original?.to ?? {};
+        const isUser = currentUser === email;
+
+        return (
+          <>
+            <span className={cn("font-medium", isUser && "text-primary")}>
+              {name}
+            </span>
+            <br />
+            <span className="text-xs text-muted-foreground">{email}</span>
+          </>
+        );
+      },
     },
     {
       header: "Transaction Id",
@@ -65,7 +70,25 @@ const useTransactionColumns = () => {
     {
       header: "Status",
       accessorKey: "status",
-      meta: { className: "text-center capitalize" },
+      cell: ({ row }) => {
+        const { status } = row.original ?? {};
+
+        return (
+          <span
+            className={cn(
+              "capitalize",
+              status === TransactionStatus.FAILED
+                ? "text-destructive"
+                : status === TransactionStatus.COMPLETED
+                ? "text-success"
+                : "text-warning"
+            )}
+          >
+            {status}
+          </span>
+        );
+      },
+      meta: { className: "text-center" },
     },
     {
       header: "Amount",

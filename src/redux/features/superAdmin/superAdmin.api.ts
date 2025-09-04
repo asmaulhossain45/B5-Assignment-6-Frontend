@@ -10,6 +10,22 @@ export const superAdminApi = baseApi.injectEndpoints({
       }),
       providesTags: ["ADMINS"],
     }),
+    getCommissionList: builder.query({
+      query: (params) => ({
+        url: "/commissions",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["ADMINS"],
+    }),
+    getLimitList: builder.query({
+      query: (params) => ({
+        url: "/limits",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["ADMINS"],
+    }),
   }),
 });
 

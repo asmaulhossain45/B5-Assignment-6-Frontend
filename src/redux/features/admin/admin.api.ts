@@ -50,6 +50,22 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["WALLETS"],
     }),
+    updateAgentApproval: builder.mutation({
+      query: ({ email, isApproved }) => ({
+        url: `admins/agents/${email}/approval`,
+        method: "PATCH",
+        data: { isApproved },
+      }),
+      invalidatesTags: ["AGENTS"],
+    }),
+    updateAdminProfile: builder.mutation({
+      query: (data) => ({
+        url: `/admins/me`,
+        method: "PATCH",
+        data: data,
+      }),
+      invalidatesTags: ["CURRENT_USER"],
+    }),
   }),
 });
 
@@ -60,4 +76,6 @@ export const {
   useGetTransactionListQuery,
   useUpdateUserStatusMutation,
   useUpdateWalletStatusMutation,
+  useUpdateAgentApprovalMutation,
+  useUpdateAdminProfileMutation,
 } = adminApi;

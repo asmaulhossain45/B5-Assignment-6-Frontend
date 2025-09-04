@@ -1,9 +1,7 @@
-
-
 const SystemSettings = () => {
   return (
-    <div>SystemSettings</div>
-  )
-}
+    <div className="flex items-center justify-center h-full text-2xl font-semibold">Coming soon...</div>
+  );
+};
 
-export default SystemSettings
+export default SystemSettings;

@@ -1,24 +1,29 @@
-// name, email, password, dob, phone, gender, location, status, isVerified
-// role, wallet (User)
-// role, wallet, businessName, isApproved, ApprovedBy, approvedAt (Agent)
-
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { BadgeCheck, Edit, Trash2 } from "lucide-react";
+import { Roles, UserStatus } from "@/constants/enums";
+import type { TErrorResponse } from "@/types/ErrorResponse";
+import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import ConfirmationModal from "@/components/modal/ConfirmationModal";
 import { StatusUpdateModal } from "@/components/modal/StatusUpdateModal";
-import { UserStatus } from "@/constants/enums";
-import { cn } from "@/lib/utils";
-import { useUpdateUserStatusMutation } from "@/redux/features/admin/admin.api";
-import type { TErrorResponse } from "@/types/ErrorResponse";
-import type { IAdmin } from "@/types/IAdmin";
-import type { CellContext, ColumnDef } from "@tanstack/react-table";
-import { Edit, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+import {
+  useUpdateAgentApprovalMutation,
+  useUpdateUserStatusMutation,
+} from "@/redux/features/admin/admin.api";
+import type { IAccount } from "@/types/IAccount";
 
-// role (Admin)
-const useUserColumns = () => {
+type Props = {
+  role: Roles;
+};
+
+const useUserColumns = ({ role }: Props) => {
   const [updateUserStatus, { isLoading: isUpdating }] =
     useUpdateUserStatusMutation();
 
-  const handleStatusUpdate = async (status: string, userInfo: IAdmin) => {
+  const [updateAgentApproval, { isLoading: isApproving }] =
+    useUpdateAgentApprovalMutation();
+
+  const handleStatusUpdate = async (status: string, userInfo: IAccount) => {
     const toastId = toast.loading("Updating status...");
 
     try {
@@ -32,7 +37,35 @@ const useUserColumns = () => {
     }
   };
 
-  const handleDelete = async (userInfo: IAdmin) => {
+  const handleApprove = async (userInfo: IAccount) => {
+    const toastId = toast.loading(
+      `${userInfo.isApproved ? "Rejecting" : "Approving"} ${userInfo.name}...`
+    );
+
+    try {
+      await updateAgentApproval({
+        email: userInfo.email,
+        isApproved: userInfo.isApproved ? false : true,
+      }).unwrap();
+      toast.success(
+        `${userInfo.name} ${
+          userInfo.isApproved ? "rejected" : "approved"
+        } successfully!`,
+        { id: toastId }
+      );
+    } catch (err: unknown) {
+      const error = err as { data: TErrorResponse };
+      toast.error(
+        error?.data?.message ||
+          `Failed to ${userInfo.isApproved ? "reject" : "approve"}`,
+        {
+          id: toastId,
+        }
+      );
+    }
+  };
+
+  const handleDelete = async (userInfo: IAccount) => {
     const toastId = toast.loading(`Deleting ${userInfo.name}...`);
 
     try {
@@ -49,7 +82,7 @@ const useUserColumns = () => {
     }
   };
 
-  const columns: ColumnDef<IAdmin>[] = [
+  const columns: ColumnDef<IAccount>[] = [
     {
       header: "Serial",
       cell: (info) => info.row.index + 1,
@@ -60,18 +93,44 @@ const useUserColumns = () => {
       accessorKey: "name",
       cell: ({ row }) => (
         <>
-          <span className="capitalize text-base font-medium">{row.original.name}</span> <br />
+          <span className="capitalize text-base font-medium">
+            {row.original.name}
+          </span>{" "}
+          <br />
           <span className="text-xs text-muted-foreground">
             {row.original.email}
           </span>
         </>
       ),
     },
-    {
-      header: "Role",
-      accessorKey: "role",
-      meta: { className: "capitalize text-center" },
-    },
+    ...(role === Roles.AGENT
+      ? [
+          {
+            header: () => (
+              <div>
+                <span>Approved Status</span> <br />
+                <span className="text-xs text-muted-foreground">Action By</span>
+              </div>
+            ),
+            accessorKey: "isApproved",
+            cell: ({ row }: CellContext<IAccount, unknown>) => (
+              <>
+                <span>
+                  {!row.original.approvedBy
+                    ? "Pending"
+                    : row.original.isApproved
+                    ? "Approved"
+                    : "Rejected"}
+                </span>
+                <br />
+                <span className="text-xs text-muted-foreground">
+                  {row.original?.approvedBy?.email}
+                </span>
+              </>
+            ),
+          },
+        ]
+      : []),
     {
       header: "Status",
       accessorKey: "status",
@@ -94,7 +153,7 @@ const useUserColumns = () => {
     {
       header: () => "Actions",
       accessorKey: "actions",
-      cell: (info: CellContext<IAdmin, unknown>) => (
+      cell: (info: CellContext<IAccount, unknown>) => (
         <div className="flex items-center justify-center gap-4">
           <StatusUpdateModal
             isLoading={isUpdating}
@@ -112,6 +171,27 @@ const useUserColumns = () => {
             }
           />
 
+          {info.row.original.role === Roles.AGENT && (
+            <ConfirmationModal
+              description={`You want to ${
+                info.row.original.isApproved ? "reject" : "approve"
+              } ${
+                info.row.original.name
+              }? Because this action can't be undone.`}
+              Icon={BadgeCheck}
+              confirmText={`${
+                info.row.original.isApproved ? "Reject" : "Approve"
+              }`}
+              color="warning"
+              Children={
+                <button className="text-warning">
+                  <BadgeCheck size={24} />
+                </button>
+              }
+              onConfirm={() => handleApprove(info.row.original)}
+            />
+          )}
+
           <ConfirmationModal
             description={`You want to delete ${info.row.original.name}? Because this action is cannot be undone.`}
             confirmText="Delete"
@@ -128,7 +208,7 @@ const useUserColumns = () => {
     },
   ];
 
-  return { columns, isUpdating };
+  return { columns, isUpdating, isApproving };
 };
 
 export default useUserColumns;

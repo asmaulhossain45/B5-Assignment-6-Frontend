@@ -55,38 +55,38 @@ const UserProfileCard = () => {
           </h5>
           <h5>
             Phone:{" "}
-            <span className="text-muted-foreground">
+            <span className="text-muted-foreground capitalize">
               {currentUser?.phone || "Not Provided"}
             </span>
           </h5>
           <h5>
             DOB:{" "}
-            <span className="text-muted-foreground">
+            <span className="text-muted-foreground capitalize">
               {dob ? dob : "Not Provided"}
             </span>
           </h5>
           <h5>
             Gender:{" "}
-            <span className="text-muted-foreground">
+            <span className="text-muted-foreground capitalize">
               {currentUser?.gender || "Not Provided"}
             </span>
           </h5>
           <h5>
             Division:{" "}
-            <span className="text-muted-foreground">
+            <span className="text-muted-foreground capitalize">
               {currentUser?.location?.division || "Not Provided"}
             </span>
           </h5>
           <h5>
             District:{" "}
-            <span className="text-muted-foreground">
+            <span className="text-muted-foreground capitalize">
               {currentUser?.location?.district || "Not Provided"}
             </span>
           </h5>
 
           <h5>
             Address:{" "}
-            <span className="text-muted-foreground">
+            <span className="text-muted-foreground capitalize">
               {currentUser?.location?.address || "Not Provided"}
             </span>
           </h5>

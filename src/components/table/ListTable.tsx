@@ -38,6 +38,7 @@ interface ListTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isLoading?: boolean;
+  isFetching?: boolean;
   meta?: IMetaResponse;
 
   searchInput?: string;
@@ -56,6 +57,7 @@ export const ListTable = <TData, TValue>({
   columns,
   data,
   isLoading = true,
+  isFetching = false,
   meta,
 
   searchInput,
@@ -124,7 +126,7 @@ export const ListTable = <TData, TValue>({
             variant={"outline"}
             className="rounded-none bg-sidebar dark:bg-sidebar disabled:cursor-not-allowed disabled:opacity-50"
             onClick={toggleSortOrder}
-            disabled={isLoading || !sortBy}
+            disabled={isLoading || isFetching || !sortBy}
           >
             <ListFilter
               className={cn(
@@ -159,7 +161,7 @@ export const ListTable = <TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {isLoading ? (
+          {isLoading || isFetching ? (
             Array.from({ length: meta?.limit || 10 }).map((_, index) => (
               <TableRow key={index}>
                 {columns.map((_, idx) => (

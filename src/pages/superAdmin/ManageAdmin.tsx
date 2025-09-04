@@ -2,6 +2,7 @@ import { ListTable, type SortOption } from "@/components/table/ListTable";
 import { useGetAdminListQuery } from "@/redux/features/superAdmin/superAdmin.api";
 import { useListTableParams } from "@/hooks/useListTableParams";
 import useUserColumns from "@/hooks/useUserColumns";
+import { Roles } from "@/constants/enums";
 
 const sortOptions: SortOption[] = [
   { label: "Name", value: "name" },
@@ -19,8 +20,8 @@ const ManageAdmin = () => {
     sortOrder,
     page,
   } = useListTableParams();
-  const { data, isLoading } = useGetAdminListQuery(params);
-  const { columns } = useUserColumns();
+  const { data, isLoading, isFetching } = useGetAdminListQuery(params);
+  const { columns } = useUserColumns({ role: Roles.ADMIN });
 
   return (
     <>
@@ -29,6 +30,7 @@ const ManageAdmin = () => {
         data={data?.data || []}
         meta={data?.meta}
         isLoading={isLoading}
+        isFetching={isFetching}
         searchInput={searchInput}
         setSearchInput={setSearchInput}
         sortBy={sortBy}

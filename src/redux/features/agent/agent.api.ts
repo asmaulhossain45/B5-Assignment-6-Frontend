@@ -1,4 +1,15 @@
 import { baseApi } from "@/redux/baseApi";
+import type { AppResponse } from "@/types/AppResponse";
+
+export interface IAgentSummaryResponse {
+  totalCashInAmount: number;
+  totalCashInCount: number;
+  totalCashOutAmount: number;
+  totalCashOutCount: number;
+  totalCommissionsAmount: number;
+  totalTransactionsAmount: number;
+  totalTransactionsCount: number;
+}
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -7,6 +18,13 @@ export const userApi = baseApi.injectEndpoints({
         url: "/agents/me",
         method: "GET",
         params,
+      }),
+      providesTags: ["CURRENT_USER"],
+    }),
+    getAgentSummary: builder.query<AppResponse<IAgentSummaryResponse>, void>({
+      query: () => ({
+        url: "/agents/summary",
+        method: "GET",
       }),
       providesTags: ["CURRENT_USER"],
     }),
@@ -26,6 +44,14 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["TRANSACTIONS"],
     }),
+    getAgentCommission: builder.query({
+      query: (params) => ({
+        url: "agents/commissions",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["COMMISSIONS"],
+    }),
     updateAgentProfile: builder.mutation({
       query: (data) => ({
         url: `/agents/me`,
@@ -39,7 +65,9 @@ export const userApi = baseApi.injectEndpoints({
 
 export const {
   useGetAgentProfileQuery,
+  useGetAgentSummaryQuery,
   useGetAgentWalletQuery,
   useGetAgentTransactionQuery,
+  useGetAgentCommissionQuery,
   useUpdateAgentProfileMutation,
 } = userApi;

@@ -22,7 +22,6 @@ const ProfileManagement = () => {
       });
     }
   };
-
   return <ProfileUpdateForm onSubmit={onSubmit} isLoading={isLoading} />;
 };
 

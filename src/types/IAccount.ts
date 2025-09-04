@@ -22,6 +22,13 @@ export interface IAccount {
   status: UserStatus;
   isVerified: boolean;
 
+  isApproved: boolean;
+  approvedBy?: {
+    name: string;
+    email: string;
+  };
+  approvedAt?: Date;
+
   resetOtp?: string;
   verifyOtp?: string;
   resetOtpExpiryAt?: Date;

@@ -10,6 +10,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type Props = {
   title?: string;
@@ -19,6 +20,7 @@ type Props = {
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
+  color?: "destructive" | "warning";
 };
 
 const ConfirmationModal = ({
@@ -29,6 +31,7 @@ const ConfirmationModal = ({
   confirmText = "Confirm",
   cancelText = "Cancel",
   onConfirm,
+  color = "destructive",
 }: Props) => {
   return (
     <AlertDialog>
@@ -37,9 +40,9 @@ const ConfirmationModal = ({
       <AlertDialogContent className="w-96">
         <AlertDialogHeader>
           {Icon ? (
-            <Icon size={40} className="text-destructive mx-auto" />
+            <Icon size={40} className={cn("mx-auto", `text-${color}`)} />
           ) : (
-            <Trash2 size={40} className="text-destructive mx-auto" />
+            <Trash2 size={40} className={cn("mx-auto", `text-${color}`)} />
           )}
 
           <AlertDialogTitle className="text-center">
@@ -55,7 +58,9 @@ const ConfirmationModal = ({
 
           <AlertDialogCancel
             onClick={onConfirm}
-            className="bg-destructive hover:bg-destructive/70 dark:bg-destructive dark:hover:bg-destructive/70 text-light"
+            className={cn(
+              `bg-${color} hover:bg-${color}/70 dark:bg-${color} dark:hover:bg-${color}/70 text-light`
+            )}
           >
             {confirmText}
           </AlertDialogCancel>

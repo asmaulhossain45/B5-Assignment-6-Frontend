@@ -4,6 +4,7 @@ import {
   useGetUserListQuery,
 } from "@/redux/features/admin/admin.api";
 import useUserColumns from "@/hooks/useUserColumns";
+import { Roles } from "@/constants/enums";
 
 const sortOptions: SortOption[] = [
   { label: "Name", value: "name" },
@@ -21,8 +22,8 @@ const ManageUsers = () => {
     sortOrder,
     page,
   } = useListTableParams();
-  const { data, isLoading } = useGetUserListQuery(params);
-  const { columns } = useUserColumns();
+  const { data, isLoading, isFetching } = useGetUserListQuery(params);
+  const { columns } = useUserColumns({role: Roles.USER});
 
   return (
     <>
@@ -31,6 +32,7 @@ const ManageUsers = () => {
         data={data?.data || []}
         meta={data?.meta}
         isLoading={isLoading}
+        isFetching={isFetching}
         searchInput={searchInput}
         setSearchInput={setSearchInput}
         sortBy={sortBy}

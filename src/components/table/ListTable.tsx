@@ -122,8 +122,9 @@ export const ListTable = <TData, TValue>({
 
           <Button
             variant={"outline"}
-            className="rounded-none bg-sidebar dark:bg-sidebar"
+            className="rounded-none bg-sidebar dark:bg-sidebar disabled:cursor-not-allowed disabled:opacity-50"
             onClick={toggleSortOrder}
+            disabled={isLoading || !sortBy}
           >
             <ListFilter
               className={cn(

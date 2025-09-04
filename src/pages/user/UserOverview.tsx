@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TransactionStatus } from "@/constants/enums";
 import { cn } from "@/lib/utils";
 import {
   useGetUserTransactionQuery,
@@ -26,12 +27,12 @@ import { NavLink } from "react-router";
 const UserOverview = () => {
   const { data } = useGetUserWalletQuery();
   const { data: transaction, isLoading: isLoadingTransaction } =
-    useGetUserTransactionQuery({});
+    useGetUserTransactionQuery({ limit: 10 });
 
   const cardData = [
     {
       label: "Balance",
-      value: data?.data?.balance || "0.00",
+      value: data?.data?.balance.toFixed(2) || "00.00",
       Icon: Wallet,
       bgColor: "bg-chart-1",
       textColor: "text-chart-1",
@@ -116,12 +117,15 @@ const UserOverview = () => {
 
         <Table className="border">
           <TableHeader className="bg-card">
-            <TableRow>
+            <TableRow className="py-2">
+              <TableHead className="flex flex-col gap-1 py-1">
+                <span className="text-sm font-medium">Date</span>
+                <span className="text-xs text-muted-foreground">Time</span>
+              </TableHead>
               <TableHead>Transaction ID</TableHead>
-              <TableHead>Type</TableHead>
+              <TableHead className="text-center">Type</TableHead>
+              <TableHead className="text-center">Status</TableHead>
               <TableHead>Amount</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Date</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -130,39 +134,69 @@ const UserOverview = () => {
               ? Array.from({ length: 10 }).map((_, index) => (
                   <TableRow key={index}>
                     <TableCell>
-                      <Skeleton className="h-5 w-full rounded-none" />
+                      <Skeleton className="h-10 w-full rounded-none" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-5 w-full rounded-none" />
+                      <Skeleton className="h-10 w-full rounded-none" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-5 w-full rounded-none" />
+                      <Skeleton className="h-10 w-full rounded-none" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-5 w-full rounded-none" />
+                      <Skeleton className="h-10 w-full rounded-none" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-5 w-full rounded-none" />
+                      <Skeleton className="h-10 w-full rounded-none" />
                     </TableCell>
                   </TableRow>
                 ))
-              : transaction?.data
-                  .slice(0, 10)
-                  .map((item: ITransaction, index: number) => (
-                    <TableRow key={index}>
-                      <TableCell className="capitalize">{item.transactionId}</TableCell>
-                      <TableCell className="capitalize">{item.type}</TableCell>
-                      <TableCell>${item.amount}</TableCell>
-                      <TableCell className="capitalize">
-                        {item.status}
-                      </TableCell>
-                      <TableCell>
-                        {item.createdAt
-                          ? new Date(item.createdAt).toDateString()
-                          : ""}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+              : transaction?.data.map((item: ITransaction, index: number) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      {item?.createdAt ? (
+                        <div className="flex flex-col gap-1">
+                          <span className="text-sm font-medium">
+                            {new Date(item.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              }
+                            )}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(item.createdAt).toLocaleTimeString()}
+                          </span>
+                        </div>
+                      ) : (
+                        "N/A"
+                      )}
+                    </TableCell>
+
+                    <TableCell className="capitalize">
+                      {item.transactionId}
+                    </TableCell>
+
+                    <TableCell className="capitalize text-center">{item.type}</TableCell>
+
+                    <TableCell
+                      className={cn(
+                        "capitalize text-center",
+                        item?.status === TransactionStatus.COMPLETED &&
+                          "text-success",
+                        item?.status === TransactionStatus.FAILED &&
+                          "text-destructive",
+                        item?.status === TransactionStatus.PENDING &&
+                          "text-warning"
+                      )}
+                    >
+                      {item?.status}
+                    </TableCell>
+
+                    <TableCell>${item.amount}</TableCell>
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
       </div>

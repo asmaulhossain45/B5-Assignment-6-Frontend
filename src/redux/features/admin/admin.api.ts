@@ -1,4 +1,13 @@
 import { baseApi } from "@/redux/baseApi";
+import type { AppResponse } from "@/types/AppResponse";
+
+type AdminSummaryResponse = {
+  totalUserCount: number;
+  totalAgentCount: number;
+  totalAdminCount: number;
+  transactionCount: number;
+  transactionVolume: number;
+};
 
 export const adminApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,6 +18,12 @@ export const adminApi = baseApi.injectEndpoints({
         params,
       }),
       providesTags: ["USERS"],
+    }),
+    getAdminSummart: builder.query<AppResponse<AdminSummaryResponse>, void>({
+      query: () => ({
+        url: "/admins/summary",
+        method: "GET",
+      }),
     }),
     getAgentList: builder.query({
       query: (params) => ({
@@ -51,10 +66,10 @@ export const adminApi = baseApi.injectEndpoints({
       invalidatesTags: ["WALLETS"],
     }),
     updateAgentApproval: builder.mutation({
-      query: ({ email, isApproved }) => ({
+      query: ({ email, approvalStatus }) => ({
         url: `admins/agents/${email}/approval`,
         method: "PATCH",
-        data: { isApproved },
+        data: { approvalStatus },
       }),
       invalidatesTags: ["AGENTS"],
     }),
@@ -71,6 +86,7 @@ export const adminApi = baseApi.injectEndpoints({
 
 export const {
   useGetUserListQuery,
+  useGetAdminSummartQuery,
   useGetAgentListQuery,
   useGetWalletListQuery,
   useGetTransactionListQuery,

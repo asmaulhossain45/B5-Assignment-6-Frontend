@@ -1,18 +1,17 @@
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Separator } from "../ui/separator";
-import { Button } from "../ui/button";
-import { NavLink } from "react-router";
+import { Roles } from "@/constants/enums";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { cn } from "@/lib/utils";
-import { formatDate } from "@/utils/formatdate";
+import { NavLink } from "react-router";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
 
-// name, email, dob, phone, gender, location, status, isVerified
 const UserProfileCard = () => {
   const { currentUser, userRole } = useCurrentUser();
 
-  const dob = currentUser?.dob
-    ? formatDate(new Date(currentUser.dob))
-    : undefined;
+  const dateOfBirth = currentUser.dob
+    ? new Date(currentUser.dob).toLocaleDateString()
+    : "Not Provided";
 
   return (
     <div className="bg-sidebar grid grid-cols-1 lg:grid-cols-4 gap-6 border p-4 md:p-6 w-full max-w-96 lg:max-w-2xl">
@@ -39,7 +38,11 @@ const UserProfileCard = () => {
             </span>
           </div>
 
-          <NavLink to={`/dashboard/${userRole}/profile-management`}>
+          <NavLink
+            to={`/dashboard/${
+              userRole === Roles.SUPER_ADMIN ? "admin" : userRole
+            }/profile-management`}
+          >
             <Button className="rounded-none">Edit</Button>
           </NavLink>
         </div>
@@ -62,7 +65,7 @@ const UserProfileCard = () => {
           <h5>
             DOB:{" "}
             <span className="text-muted-foreground capitalize">
-              {dob ? dob : "Not Provided"}
+              {dateOfBirth}
             </span>
           </h5>
           <h5>

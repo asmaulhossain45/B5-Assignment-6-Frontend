@@ -3,10 +3,12 @@ import ProfileUpdateForm, {
 } from "@/components/forms/ProfileUpdateForm";
 import { useUpdateUserProfileMutation } from "@/redux/features/user/user.api";
 import type { TErrorResponse } from "@/types/ErrorResponse";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import type z from "zod";
 
 const ProfileManagement = () => {
+  const navigate = useNavigate();
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
@@ -15,6 +17,7 @@ const ProfileManagement = () => {
     try {
       await updateUserProfile(data).unwrap();
       toast.success("Profile updated successfully!", { id: toastId });
+      navigate("/dashboard/user/profile");
     } catch (err: unknown) {
       const error = err as { data: TErrorResponse };
       toast.error(error?.data?.message || "Failed to update profile!", {

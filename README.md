@@ -1,69 +1,93 @@
-# React + TypeScript + Vite
+## Digital Wallet System — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A secure, role-based, and user-friendly React + TypeScript frontend for a modern Digital Wallet system.
+Built with Redux Toolkit, RTK Query, and Tailwind CSS, the app provides separate dashboards for Users, Agents, and Admins, along with smooth UI interactions, responsive layouts, and a production-ready architecture.
 
-Currently, two official plugins are available:
+### 🚀 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+React
 
-## Expanding the ESLint configuration
+TypeScript
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+React Router
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Redux Toolkit
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+RTK Query
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+React-Joyride (guided tour)
+
+### User Dashboard
+
+Wallet balance + summary cards
+
+Deposit
+
+Withdraw
+
+Send money (search by email/phone)
+
+Transaction history:
+
+Pagination
+
+Filtering
+
+Profile management
+
+### Agent Dashboard
+
+Cash-in / cash-out UI
+
+Add/withdraw money from user accounts
+
+Agent transaction list
+
+Commission history UI
+
+Agent profile update
+
+### Admin Dashboard
+
+Overview cards (users, agents, transactions, volume)
+
+Manage users:
+
+View
+
+Block/unblock
+
+Manage agents:
+
+Approve/suspend
+
+System-wide transactions page:
+
+Search
+
+Filters
+
+Pagination
+
+Admin profile settings
+
+### Landing Page
+
+![Landing Page](./screenshots/landing.png)
+
+## 🚀 Live Deployment
+
+### 🔗 Frontend
+
+https://b5-assignment-6-frontend.vercel.app/
+
+### 🔗 Backend
+
+https://b5-assignment-6-backend.vercel.app/
+
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+git clone https://github.com/asmaulhossain45/B5-Assignment-6-Frontend.git
+cd wallet-frontend
+pnpm install install
+pnpm run dev
 ```

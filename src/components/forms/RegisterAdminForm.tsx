@@ -40,9 +40,9 @@ const RegisterAdminForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "Demo Admin",
-      email: "demoadmin@gmail.com",
-      password: "123456789",
+      name: "",
+      email: "",
+      password: "",
     },
   });
 
@@ -72,10 +72,10 @@ const RegisterAdminForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="sr-only">Your Name</FormLabel>
+              <FormLabel className="sr-only">Admin Name</FormLabel>
 
               <FormControl>
-                <Input placeholder="Your Name" {...field} />
+                <Input placeholder="Admin Name" {...field} />
               </FormControl>
 
               <FormDescription className="sr-only">

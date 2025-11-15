@@ -1,115 +1,103 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
-import { Skeleton } from "../ui/skeleton";
-import type { ITransaction } from "@/types/ITransaction";
 import { TransactionStatus } from "@/constants/enums";
 import { cn } from "@/lib/utils";
+import type { ITransaction } from "@/types/ITransaction";
+import type { ColumnDef } from "@tanstack/react-table";
+import { ListTable } from "./ListTable";
 
 type Props = {
   transactions: ITransaction[];
-  isLoadingTransaction: boolean;
+  isLoading: boolean;
+  isFetching: boolean;
 };
 
 const RecentTransactionList = ({
   transactions,
-  isLoadingTransaction,
+  isLoading,
+  isFetching,
 }: Props) => {
+  const columns: ColumnDef<ITransaction>[] = [
+    {
+      accessorKey: "createdAt",
+      header: () => (
+        <span>
+          Date <br />
+          <span className="text-xs text-muted-foreground">Time</span>
+        </span>
+      ),
+      cell: ({ row }) => {
+        const value = row.original.createdAt;
+
+        if (!value) return "N/A";
+
+        const dateObj = new Date(value);
+
+        const date = dateObj.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+        });
+        const time = dateObj.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        });
+
+        return (
+          <span>
+            {date} <br />{" "}
+            <span className="text-xs text-muted-foreground">{time}</span>
+          </span>
+        );
+      },
+    },
+    { header: "Transaction ID", accessorKey: "transactionId" },
+    {
+      header: "Type",
+      accessorKey: "type",
+      meta: { className: "capitalize text-center" },
+    },
+    {
+      header: "Status",
+      accessorKey: "status",
+      cell: ({ row }) => {
+        const status = row.original.status;
+
+        return (
+          <span
+            className={cn(
+              status === TransactionStatus.COMPLETED && "text-success",
+              status === TransactionStatus.FAILED && "text-destructive",
+              status === TransactionStatus.PENDING && "text-warning"
+            )}
+          >
+            {status}
+          </span>
+        );
+      },
+      meta: { className: "capitalize text-center" },
+    },
+    {
+      header: "Amount",
+      accessorKey: "amount",
+      cell: ({ row }) => (
+        <div className="text-base text-right font-medium">
+          ${row.original.amount.toFixed(2)}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="space-y-2">
       <h3 className="text-xl font-semibold">Recent Transactions</h3>
 
-      <Table className="border">
-        <TableHeader className="bg-card">
-          <TableRow className="py-2">
-            <TableHead className="flex flex-col gap-1 py-1">
-              <span className="text-sm font-medium">Date</span>
-              <span className="text-xs text-muted-foreground">Time</span>
-            </TableHead>
-            <TableHead>Transaction ID</TableHead>
-            <TableHead className="text-center">Type</TableHead>
-            <TableHead className="text-center">Status</TableHead>
-            <TableHead>Amount</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {isLoadingTransaction
-            ? Array.from({ length: 10 }).map((_, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Skeleton className="h-10 w-full rounded-none" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-10 w-full rounded-none" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-10 w-full rounded-none" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-10 w-full rounded-none" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-10 w-full rounded-none" />
-                  </TableCell>
-                </TableRow>
-              ))
-            : transactions?.map((item: ITransaction, index: number) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    {item?.createdAt ? (
-                      <div className="flex flex-col gap-1">
-                        <span className="text-sm font-medium">
-                          {new Date(item.createdAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            }
-                          )}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {new Date(item.createdAt).toLocaleTimeString()}
-                        </span>
-                      </div>
-                    ) : (
-                      "N/A"
-                    )}
-                  </TableCell>
-
-                  <TableCell className="capitalize">
-                    {item.transactionId}
-                  </TableCell>
-
-                  <TableCell className="capitalize text-center">
-                    {item.type}
-                  </TableCell>
-
-                  <TableCell
-                    className={cn(
-                      "capitalize text-center",
-                      item?.status === TransactionStatus.COMPLETED &&
-                        "text-success",
-                      item?.status === TransactionStatus.FAILED &&
-                        "text-destructive",
-                      item?.status === TransactionStatus.PENDING &&
-                        "text-warning"
-                    )}
-                  >
-                    {item?.status}
-                  </TableCell>
-
-                  <TableCell className="text-right text-lg font-semibold">${item.amount.toFixed(2)}</TableCell>
-                </TableRow>
-              ))}
-        </TableBody>
-      </Table>
+      <ListTable
+        columns={columns}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        data={transactions}
+      />
     </div>
   );
 };

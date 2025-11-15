@@ -1,6 +1,12 @@
+import CommissionTable from "@/components/table/CommissionTable";
+import LimitTable from "@/components/table/LimitTable";
+
 const SystemSettings = () => {
   return (
-    <div className="flex items-center justify-center h-full text-2xl font-semibold">Coming soon...</div>
+    <div className="space-y-4">
+      <CommissionTable />
+      <LimitTable />
+    </div>
   );
 };
 

@@ -1,189 +1,216 @@
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { TransactionStatus } from "@/constants/enums";
+import FilterDrawer, {
+  type FilterConfig,
+} from "@/components/table/controll/FilterDrawer";
+import SearchControll from "@/components/table/controll/SearchControll";
+import SortControl from "@/components/table/controll/SortControl";
+import TablePagination from "@/components/table/controll/TablePagination";
+import { ListTable, type SortOption } from "@/components/table/ListTable";
+import { TransactionStatus, TransactionType } from "@/constants/enums";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { cn } from "@/lib/utils";
 import { useGetAgentCommissionQuery } from "@/redux/features/agent/agent.api";
 import type { ITransaction } from "@/types/ITransaction";
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { ColumnDef } from "@tanstack/react-table";
+import { useForm } from "react-hook-form";
+import z from "zod";
+
+const sortOptions: SortOption[] = [
+  { label: "Type", value: "type" },
+  { label: "Status", value: "status" },
+  { label: "Commission", value: "commission" },
+  { label: "Transaction Date", value: "createdAt" },
+];
+
+const filterConfig: FilterConfig[] = [
+  {
+    label: "Transaction Status",
+    field: "status",
+    type: "radio",
+    options: [
+      { label: "Failed", value: TransactionStatus.FAILED },
+      { label: "Pending", value: TransactionStatus.PENDING },
+      { label: "Completed", value: TransactionStatus.COMPLETED },
+    ],
+  },
+  {
+    label: "Transaction Type",
+    field: "type",
+    type: "radio",
+    options: [
+      { label: "Deposit", value: TransactionType.DEPOSIT },
+      { label: "Withdraw", value: TransactionType.WITHDRAW },
+      { label: "Send Money", value: TransactionType.SEND_MONEY },
+      { label: "Cash In", value: TransactionType.CASH_IN },
+      { label: "Cash Out", value: TransactionType.CASH_OUT },
+    ],
+  },
+];
+
+const filterSchema = z.object({
+  status: z.string().optional(),
+  type: z.string().optional(),
+});
 
 const AgentCommission = () => {
   const { currentUser } = useCurrentUser();
-  const [page, setPage] = useState(1);
+  const {
+    params,
+    searchInput,
+    setSearchInput,
+    setFilters,
+    order,
+    setSort,
+    setOrder,
+    setPage,
+  } = useQueryParams();
+  const { data, isLoading, isFetching } = useGetAgentCommissionQuery(params);
 
-  const { data, isLoading, isFetching } = useGetAgentCommissionQuery({
-    page,
-    limit: 10,
+  const form = useForm<z.infer<typeof filterSchema>>({
+    resolver: zodResolver(filterSchema),
   });
+
+  const columns: ColumnDef<ITransaction>[] = [
+    {
+      accessorKey: "createdAt",
+      header: () => (
+        <span>
+          Date <br />
+          <span className="text-xs text-muted-foreground">Time</span>
+        </span>
+      ),
+      cell: ({ row }) => {
+        const value = row.original.createdAt;
+
+        if (!value) return "N/A";
+
+        const dateObj = new Date(value);
+
+        const date = dateObj.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+        });
+        const time = dateObj.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        });
+
+        return (
+          <span>
+            {date} <br />{" "}
+            <span className="text-xs text-muted-foreground">{time}</span>
+          </span>
+        );
+      },
+    },
+    {
+      header: () => (
+        <span>
+          To / From
+          <br />
+          <span className="text-xs text-muted-foreground">Email Address</span>
+        </span>
+      ),
+      accessorKey: "toFrom",
+      cell: ({ row }) => {
+        const { from, to } = row.original;
+        const isSender = from?.email === currentUser?.email;
+        const result = isSender ? to : from;
+
+        return (
+          <span>
+            {result?.name} <br />
+            <span className="text-xs text-muted-foreground">
+              {result?.email}
+            </span>
+          </span>
+        );
+      },
+    },
+    {
+      accessorKey: "transactionId",
+      header: () => "Transaction ID",
+    },
+    {
+      accessorKey: "type",
+      header: () => "Type",
+      meta: { className: "capitalize" },
+    },
+    {
+      accessorKey: "status",
+      header: () => "Status",
+      meta: { className: "capitalize" },
+      cell: ({ row }) => {
+        const status = row.original.status;
+
+        return (
+          <span
+            className={cn(
+              "capitalize",
+              status === TransactionStatus.PENDING && "text-warning",
+              status === TransactionStatus.COMPLETED && "text-success",
+              status === TransactionStatus.FAILED && "text-destructive"
+            )}
+          >
+            {status}
+          </span>
+        );
+      },
+    },
+    {
+      accessorKey: "commission",
+      header: () => "Commission",
+      cell: ({ row }) => {
+        const commission = row.original.commission;
+
+        return <div className="text-right">$ {commission.toFixed(2)}</div>;
+      },
+    },
+  ];
 
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl lg:text-2xl font-semibold">
-          Commission History
-        </h2>
-      </div>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+        <SearchControll
+          placeholder="Transaction Id"
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
+        />
 
-      <Table className="border">
-        <TableHeader className="bg-sidebar">
-          <TableRow>
-            <TableHead className="flex flex-col gap-1 py-1">
-              <span className="text-sm font-medium">Date</span>
-              <span className="text-xs text-muted-foreground">Time</span>
-            </TableHead>
-            <TableHead>To / From</TableHead>
-            <TableHead>Transaction ID</TableHead>
-            <TableHead className="text-center">Type</TableHead>
-            <TableHead className="text-center">Status</TableHead>
-            <TableHead className="text-center">Commission</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isLoading || isFetching ? (
-            Array.from({ length: 10 }).map((_, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  <Skeleton className="h-10 rounded-none" />
-                </TableCell>
-                <TableCell>
-                  <Skeleton className="h-10 rounded-none" />
-                </TableCell>
-                <TableCell>
-                  <Skeleton className="h-10 rounded-none" />
-                </TableCell>
-                <TableCell>
-                  <Skeleton className="h-10 rounded-none" />
-                </TableCell>
-                <TableCell>
-                  <Skeleton className="h-10 rounded-none" />
-                </TableCell>
-                <TableCell>
-                  <Skeleton className="h-10 rounded-none" />
-                </TableCell>
-              </TableRow>
-            ))
-          ) : data?.data.length > 0 ? (
-            data?.data.map((item: ITransaction, index: number) => (
-              <TableRow key={index}>
-                <TableCell>
-                  {item?.createdAt ? (
-                    <div className="flex flex-col gap-1">
-                      <span className="text-sm font-medium">
-                        {new Date(item.createdAt).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(item.createdAt).toLocaleTimeString()}
-                      </span>
-                    </div>
-                  ) : (
-                    "N/A"
-                  )}
-                </TableCell>
+        <div className="flex items-center justify-between gap-2">
+          <FilterDrawer
+            form={form}
+            filterConfig={filterConfig}
+            setFilters={setFilters}
+            setPage={setPage}
+          />
 
-                <TableCell className="capitalize">
-                  {item?.from?.email === currentUser?.email ? (
-                    <div className="flex flex-col gap-1">
-                      <span className="text-sm font-medium">
-                        {item?.to?.name}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {item?.to?.email}
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col gap-1">
-                      <span className="text-sm font-medium">
-                        {item?.from?.name}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {item?.from?.email}
-                      </span>
-                    </div>
-                  )}
-                </TableCell>
-
-                <TableCell className="capitalize">
-                  {item?.transactionId}
-                </TableCell>
-
-                <TableCell className="capitalize text-center">
-                  {item?.type}
-                </TableCell>
-
-                <TableCell
-                  className={cn(
-                    "capitalize text-center",
-                    item?.status === TransactionStatus.COMPLETED &&
-                      "text-success",
-                    item?.status === TransactionStatus.FAILED &&
-                      "text-destructive",
-                    item?.status === TransactionStatus.PENDING && "text-warning"
-                  )}
-                >
-                  {item?.status}
-                </TableCell>
-
-                <TableCell className="text-right text-base font-semibold">
-                  <span className="mr-1">$</span>
-                  {item?.commission.toFixed(2)}
-                </TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell
-                colSpan={6}
-                className="text-center text-lg font-semibold py-24"
-              >
-                Not found
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-
-      <div className="flex items-center justify-between gap-4">
-        <p>
-          {data?.meta?.page || 1} of {data?.meta?.totalPage || 1} pages
-        </p>
-
-        <div className="flex items-center gap-2">
-          <Button
-            variant={"outline"}
-            size={"sm"}
-            onClick={() => setPage(data?.meta?.page - 1)}
-            disabled={data?.meta?.page === 1 || isLoading || isFetching}
-            className="bg-sidebar rounded-none disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Previous
-          </Button>
-          <Button
-            variant={"outline"}
-            size={"sm"}
-            onClick={() => setPage(data?.meta?.page + 1)}
-            disabled={
-              data?.meta?.page === data?.meta?.totalPage ||
-              isLoading ||
-              isFetching
-            }
-            className="bg-sidebar rounded-none disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Next
-          </Button>
+          <SortControl
+            order={order}
+            setSort={setSort}
+            setOrder={setOrder}
+            isFetching={isFetching}
+            sortOptions={sortOptions}
+          />
         </div>
       </div>
+
+      <ListTable
+        columns={columns}
+        data={data?.data}
+        isLoading={isLoading}
+        isFetching={isFetching}
+      />
+
+      <TablePagination
+        meta={data?.meta}
+        setPage={setPage}
+        isFetching={isFetching}
+      />
     </section>
   );
 };

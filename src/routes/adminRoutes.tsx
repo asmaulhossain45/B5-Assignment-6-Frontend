@@ -3,12 +3,10 @@ import AdminOverview from "@/pages/admin/AdminOverview";
 import AdminProfile from "@/pages/admin/AdminProfile";
 import ManageAgents from "@/pages/admin/ManageAgents";
 import ManageUsers from "@/pages/admin/ManageUsers";
-import ManageWallets from "@/pages/admin/ManageWallets";
 import ProfileManagement from "@/pages/admin/ProfileManagement";
 import TransactionHistory from "@/pages/admin/TransactionHistory";
 import type { TRoute } from "@/types/TRoute";
 import {
-  CreditCard,
   HandCoins,
   HomeIcon,
   User,
@@ -44,13 +42,6 @@ export const adminRoutes: TRoute[] = [
     Component: ManageAgents,
     label: "Manage Agents",
     path: "admin/manage-agents",
-    roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
-  },
-  {
-    icon: CreditCard,
-    Component: ManageWallets,
-    label: "Manage Wallets",
-    path: "admin/wallets",
     roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
   },
   {

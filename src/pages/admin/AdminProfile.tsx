@@ -1,9 +1,11 @@
-
+import UserProfileCard from "@/components/cards/UserProfileCard";
 
 const AdminProfile = () => {
   return (
-    <div>AdminProfile</div>
-  )
-}
+    <section className="flex items-center justify-center h-full">
+      <UserProfileCard />
+    </section>
+  );
+};
 
-export default AdminProfile
+export default AdminProfile;

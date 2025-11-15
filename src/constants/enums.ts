@@ -12,11 +12,19 @@ export const UserStatus = {
   INACTIVE: "inactive",
   BLOCKED: "blocked",
   DELETED: "deleted",
-  PENDING: "pending",
   SUSPENDED: "suspended",
 };
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus];
+
+export const ApprovalStatus = {
+  PENDING: "pending",
+  APPROVED: "approved",
+  REJECTED: "rejected",
+};
+
+export type ApprovalStatus =
+  (typeof ApprovalStatus)[keyof typeof ApprovalStatus];
 
 export const Gender = {
   MALE: "male",

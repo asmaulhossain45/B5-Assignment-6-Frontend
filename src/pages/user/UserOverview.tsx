@@ -16,8 +16,11 @@ import { NavLink } from "react-router";
 
 const UserOverview = () => {
   const { data } = useGetUserWalletQuery();
-  const { data: transaction, isLoading: isLoadingTransaction } =
-    useGetUserTransactionQuery({ limit: 10 });
+  const {
+    data: transaction,
+    isLoading,
+    isFetching,
+  } = useGetUserTransactionQuery({ limit: 10 });
 
   const cardData = [
     {
@@ -104,7 +107,8 @@ const UserOverview = () => {
 
       <RecentTransactionList
         transactions={transaction?.data ?? []}
-        isLoadingTransaction={isLoadingTransaction}
+        isLoading={isLoading}
+        isFetching={isFetching}
       />
     </section>
   );

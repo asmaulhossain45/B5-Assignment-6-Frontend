@@ -1,18 +1,16 @@
+import { Button } from "@/components/ui/button";
 import type { IMetaResponse } from "@/types/IMeta";
-import { Button } from "../ui/button";
 
 type Props = {
   meta: IMetaResponse;
+  isFetching: boolean;
   setPage: (page: number) => void;
-  isLoading?: boolean;
-  isFetching?: boolean;
 };
 
 const TablePagination = ({
-  meta = { page: 1, totalPage: 1 },
   setPage,
-  isLoading,
-  isFetching,
+  isFetching = false,
+  meta = { page: 1, totalPage: 1 },
 }: Props) => {
   return (
     <div className="flex items-center justify-between gap-4">
@@ -25,7 +23,7 @@ const TablePagination = ({
           variant={"outline"}
           size={"sm"}
           onClick={() => setPage(meta?.page - 1)}
-          disabled={meta?.page === 1 || isLoading || isFetching}
+          disabled={meta?.page === 1 || isFetching}
           className="bg-sidebar rounded-none disabled:cursor-not-allowed disabled:opacity-50"
         >
           Previous
@@ -34,7 +32,7 @@ const TablePagination = ({
           variant={"outline"}
           size={"sm"}
           onClick={() => setPage(meta?.page + 1)}
-          disabled={meta?.page === meta?.totalPage || isLoading || isFetching}
+          disabled={meta?.page === meta?.totalPage || isFetching}
           className="bg-sidebar rounded-none disabled:cursor-not-allowed disabled:opacity-50"
         >
           Next

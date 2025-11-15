@@ -30,6 +30,15 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: ["TRANSACTIONS"],
     }),
 
+    getLiveSearchUser: builder.query({
+      query: (params) => ({
+        url: "users/live-search",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["USERS"],
+    }),
+
     updateUserProfile: builder.mutation({
       query: (data) => ({
         url: `/users/me`,
@@ -45,5 +54,6 @@ export const {
   useGetUserProfileQuery,
   useGetUserWalletQuery,
   useGetUserTransactionQuery,
+  useGetLiveSearchUserQuery,
   useUpdateUserProfileMutation,
 } = userApi;

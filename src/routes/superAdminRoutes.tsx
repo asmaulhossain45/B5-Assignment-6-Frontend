@@ -1,9 +1,10 @@
 import { Roles } from "@/constants/enums";
+import ManageWallets from "@/pages/admin/ManageWallets";
 import AddAdmin from "@/pages/superAdmin/AddAdmin";
 import ManageAdmin from "@/pages/superAdmin/ManageAdmin";
 import SystemSettings from "@/pages/superAdmin/SystemSettings";
 import type { TRoute } from "@/types/TRoute";
-import { Settings, ShieldUser, UserPlus } from "lucide-react";
+import { CreditCard, Settings, ShieldUser, UserPlus } from "lucide-react";
 
 export const superAdminRoutes: TRoute[] = [
   {
@@ -20,7 +21,13 @@ export const superAdminRoutes: TRoute[] = [
     path: "admin/manage-admin",
     roles: [Roles.SUPER_ADMIN],
   },
-
+  {
+    icon: CreditCard,
+    Component: ManageWallets,
+    label: "Manage Wallets",
+    path: "admin/wallets",
+    roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
+  },
   {
     icon: Settings,
     Component: SystemSettings,

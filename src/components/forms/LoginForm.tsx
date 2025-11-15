@@ -50,7 +50,12 @@ const LoginForm = () => {
       navigate("/");
     } catch (err: unknown) {
       const error = err as { data: TErrorResponse };
-      toast.error(error?.data?.message || "Login failed!", { id: toastId });
+      toast.error(
+        error?.data?.errorSources[0]?.message ||
+          error?.data?.message ||
+          "Login failed!",
+        { id: toastId }
+      );
     }
   };
 

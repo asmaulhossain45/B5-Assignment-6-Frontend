@@ -1,8 +1,9 @@
-import { Outlet } from "react-router";
-import Header from "./Header";
-import Footer from "./Footer";
-import Loading from "@/pages/public/Loading";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import Loading from "@/pages/public/Loading";
+import { Outlet } from "react-router";
+import GuidedTour from "../common/GuidedTour";
+import Footer from "./Footer";
+import Header from "./Header";
 
 const PublicLayout = () => {
   const { userLoading } = useCurrentUser();
@@ -12,6 +13,7 @@ const PublicLayout = () => {
   return (
     <>
       <Header />
+      <GuidedTour />
       <main>
         <Outlet />
       </main>

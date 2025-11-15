@@ -18,8 +18,11 @@ interface IAgentSummary {
 
 const AgentOverview = () => {
   const { data } = useGetAgentSummaryQuery();
-  const { data: transaction, isLoading: isLoadingTransaction } =
-    useGetAgentTransactionQuery({ limit: 10 });
+  const {
+    data: transaction,
+    isLoading,
+    isFetching,
+  } = useGetAgentTransactionQuery({ limit: 10 });
 
   const summary: IAgentSummary[] = [
     {
@@ -76,7 +79,8 @@ const AgentOverview = () => {
 
       <RecentTransactionList
         transactions={transaction?.data ?? []}
-        isLoadingTransaction={isLoadingTransaction}
+        isLoading={isLoading}
+        isFetching={isFetching}
       />
     </section>
   );

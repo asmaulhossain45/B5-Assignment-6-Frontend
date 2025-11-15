@@ -50,8 +50,6 @@ const VerifyOtp = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const toastId = toast.loading("Verifying OTP...");
 
-    console.log(action, email);
-
     try {
       if (action === "verifyAccount") {
         await verifyAccount(data).unwrap();

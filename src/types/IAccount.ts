@@ -1,4 +1,9 @@
-import type { Gender, Roles, UserStatus } from "@/constants/enums";
+import type {
+  ApprovalStatus,
+  Gender,
+  Roles,
+  UserStatus,
+} from "@/constants/enums";
 
 export interface IAccount {
   _id?: string;
@@ -22,12 +27,12 @@ export interface IAccount {
   status: UserStatus;
   isVerified: boolean;
 
-  isApproved: boolean;
-  approvedBy?: {
+  approvalStatus: ApprovalStatus;
+  reviewedBy?: {
     name: string;
     email: string;
   };
-  approvedAt?: Date;
+  reviewedAt?: Date;
 
   resetOtp?: string;
   verifyOtp?: string;

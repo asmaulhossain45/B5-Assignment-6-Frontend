@@ -1,48 +1,34 @@
-import { useListTableParams } from "@/hooks/useListTableParams";
-import { ListTable, type SortOption } from "@/components/table/ListTable";
-import {
-  useGetUserListQuery,
-} from "@/redux/features/admin/admin.api";
-import useUserColumns from "@/hooks/useUserColumns";
-import { Roles } from "@/constants/enums";
-
-const sortOptions: SortOption[] = [
-  { label: "Name", value: "name" },
-  { label: "Created At", value: "createdAt" },
-];
+import ManageUserTable from "@/components/table/ManageUserTable";
+import { useQueryParams } from "@/hooks/useQueryParams";
+import { useGetUserListQuery } from "@/redux/features/admin/admin.api";
 
 const ManageUsers = () => {
   const {
     params,
     searchInput,
     setSearchInput,
-    setPage,
+    setFilters,
+    order,
     setSort,
-    sortBy,
-    sortOrder,
-    page,
-  } = useListTableParams();
+    setOrder,
+    setPage,
+  } = useQueryParams();
   const { data, isLoading, isFetching } = useGetUserListQuery(params);
-  const { columns } = useUserColumns({role: Roles.USER});
 
   return (
-    <>
-      <ListTable
-        columns={columns}
-        data={data?.data || []}
-        meta={data?.meta}
-        isLoading={isLoading}
-        isFetching={isFetching}
-        searchInput={searchInput}
-        setSearchInput={setSearchInput}
-        sortBy={sortBy}
-        sortOrder={sortOrder}
-        setSort={setSort}
-        sortOptions={sortOptions}
-        page={page}
-        setPage={setPage}
-      />
-    </>
+    <ManageUserTable
+      data={data?.data || []}
+      meta={data?.meta}
+      isLoading={isLoading}
+      isFetching={isFetching}
+      searchInput={searchInput}
+      setSearchInput={setSearchInput}
+      setFilters={setFilters}
+      order={order}
+      setSort={setSort}
+      setOrder={setOrder}
+      setPage={setPage}
+    />
   );
 };
 

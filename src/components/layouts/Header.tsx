@@ -1,14 +1,14 @@
-import { Link, NavLink } from "react-router";
 import Logo from "@/assets/brand/Logo.png";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { Menu } from "lucide-react";
+import { Link, NavLink } from "react-router";
+import AppSection from "../common/AppSection";
 import { ThemeToggle } from "../common/ThemeToggle";
+import { Button } from "../ui/button";
+import { CurrentUserAvatar } from "../ui/user-avatar";
 import MobileMenu from "./MobileMenu";
 import ProfileDropdown from "./ProfileDropdown";
-import { Menu } from "lucide-react";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { CurrentUserAvatar } from "../ui/user-avatar";
-import AppSection from "../common/AppSection";
 
 const navLinks = [
   { path: "/", label: "Home" },
@@ -20,12 +20,14 @@ const navLinks = [
 ];
 
 const Header = () => {
-const {currentUser} = useCurrentUser();
-
+  const { currentUser } = useCurrentUser();
 
   return (
     <header
-      className={cn("fixed w-full top-0 left-0 z-50 border-b", "bg-muted/70 backdrop-blur-3xl")}
+      className={cn(
+        "fixed w-full top-0 left-0 z-50 border-b",
+        "bg-muted/70 backdrop-blur-3xl"
+      )}
     >
       <AppSection
         as="div"
@@ -35,7 +37,10 @@ const {currentUser} = useCurrentUser();
           <img src={Logo} alt="logo" className="h-10 w-auto" />
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-4 lg:gap-6">
+        <nav
+          id="nav-menu"
+          className="hidden lg:flex items-center gap-4 lg:gap-6"
+        >
           {navLinks.map((item, index) => (
             <NavLink
               key={index}
@@ -62,7 +67,7 @@ const {currentUser} = useCurrentUser();
 
           {currentUser && (
             <ProfileDropdown layout="public" className="mt-4">
-              <CurrentUserAvatar className="hidden lg:block"/>
+              <CurrentUserAvatar className="hidden lg:block" />
             </ProfileDropdown>
           )}
 
@@ -72,7 +77,7 @@ const {currentUser} = useCurrentUser();
                 <Menu size={18} />
               </Button>
             ) : (
-              <CurrentUserAvatar className="lg:hidden"/>
+              <CurrentUserAvatar className="lg:hidden" />
             )}
           </MobileMenu>
         </div>

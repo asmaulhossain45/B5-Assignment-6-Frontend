@@ -51,9 +51,9 @@ const RegisterForm = ({ role }: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "Demo Agent",
-      email: "demoagent@gmail.com",
-      password: "123456789",
+      name: "",
+      email: "",
+      password: "",
     },
   });
 

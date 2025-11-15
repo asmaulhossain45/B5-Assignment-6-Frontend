@@ -9,6 +9,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Loading from "@/pages/public/Loading";
+import type { IAccount } from "@/types/IAccount";
 import { TransactionSchema } from "@/validation/TransactionSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -18,12 +20,22 @@ type Props = {
   onSubmit: (data: z.infer<typeof TransactionSchema>) => void;
   submitLabel: string;
   isLoading?: boolean;
+  searchInput?: string;
+  setSearchInput?: (value: string) => void;
+  users?: IAccount[];
+  userLoading?: boolean;
+  userFetching?: boolean;
 };
 
 const TransactionForm = ({
   onSubmit,
   submitLabel,
   isLoading = false,
+  searchInput,
+  setSearchInput,
+  users,
+  userLoading,
+  userFetching,
 }: Props) => {
   const form = useForm<z.infer<typeof TransactionSchema>>({
     resolver: zodResolver(TransactionSchema),
@@ -44,17 +56,57 @@ const TransactionForm = ({
           control={form.control}
           name="emailOrPhone"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="relative">
               <FormLabel className="sr-only">Email or Phone</FormLabel>
 
               <FormControl>
-                <Input placeholder="Email or Phone" {...field} />
+                <Input
+                  placeholder="Email or Phone"
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e.target.value);
+                    if (setSearchInput) {
+                      setSearchInput(e.target.value);
+                    }
+                  }}
+                />
               </FormControl>
 
               <FormDescription className="sr-only">
                 Enter email or phone number
               </FormDescription>
               <FormMessage />
+
+              {searchInput && users && users.length > 0 && (
+                <ul className="absolute bg-background border w-full top-full p-2 rounded-lg grid grid-cols-1">
+                  {userLoading || userFetching ? (
+                    <li className="flex items-center justify-center">
+                      <Loading size={"sm"} type="inline" />
+                    </li>
+                  ) : (
+                    users.map((user, index) => (
+                      <li
+                        key={index}
+                        onClick={() => {
+                          form.setValue("emailOrPhone", user.email, {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          });
+                          if (setSearchInput) {
+                            setSearchInput("");
+                          }
+                        }}
+                        className="flex flex-col hover:bg-sidebar rounded-sm p-1 px-2 cursor-pointer transition-colors duration-300"
+                      >
+                        <span className="text-xs">{user.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {user.email}
+                        </span>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              )}
             </FormItem>
           )}
         />

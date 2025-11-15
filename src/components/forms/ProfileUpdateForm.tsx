@@ -26,7 +26,6 @@ import {
 import { Gender, Roles } from "@/constants/enums";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { cn } from "@/lib/utils";
-import { formatDate } from "@/utils/formatdate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
@@ -70,7 +69,7 @@ const ProfileUpdateForm = ({ isLoading, onSubmit }: Props) => {
       name: currentUser?.name ?? "",
       businessName: currentUser?.businessName ?? "",
       email: currentUser?.email ?? "",
-      phone: currentUser?.phone ?? "",
+      phone: currentUser?.phone ?? undefined,
       dob: currentUser?.dob ? new Date(currentUser.dob) : undefined,
       gender: currentUser?.gender ?? undefined,
       location: {
@@ -263,7 +262,7 @@ const ProfileUpdateForm = ({ isLoading, onSubmit }: Props) => {
                             className="w-full rounded-none justify-between"
                           >
                             {field.value ? (
-                              `${formatDate(new Date(field.value))}`
+                              `${new Date(field.value).toLocaleDateString()}`
                             ) : (
                               <span>Pick a date</span>
                             )}

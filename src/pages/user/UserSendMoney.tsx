@@ -1,16 +1,24 @@
-import z from "zod";
-import { HandCoins } from "lucide-react";
-import { TransactionSchema } from "@/validation/TransactionSchema";
-import { toast } from "sonner";
-import TransactionForm from "@/components/forms/TransactionForm";
 import FormHeader from "@/components/common/FormHeader";
-import { useNavigate } from "react-router";
+import TransactionForm from "@/components/forms/TransactionForm";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { useUserSendMoneyMutation } from "@/redux/features/transaction/transaction.api";
+import { useGetLiveSearchUserQuery } from "@/redux/features/user/user.api";
 import type { TErrorResponse } from "@/types/ErrorResponse";
+import { TransactionSchema } from "@/validation/TransactionSchema";
+import { HandCoins } from "lucide-react";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
+import z from "zod";
 
 const UserSendMoney = () => {
   const navigate = useNavigate();
   const [userWithdraw, { isLoading }] = useUserSendMoneyMutation();
+  const { params, searchInput, setSearchInput } = useQueryParams();
+  const {
+    data,
+    isLoading: isLoadingUser,
+    isFetching: isFetchingUser,
+  } = useGetLiveSearchUserQuery({ ...params, limit: 3 });
 
   const handleSendMoney = async (data: z.infer<typeof TransactionSchema>) => {
     const toastId = toast.loading("Withdrawing...");
@@ -38,6 +46,11 @@ const UserSendMoney = () => {
           onSubmit={handleSendMoney}
           isLoading={isLoading}
           submitLabel="Send Money"
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
+          users={data?.data || []}
+          userLoading={isLoadingUser}
+          userFetching={isFetchingUser}
         />
       </div>
     </section>

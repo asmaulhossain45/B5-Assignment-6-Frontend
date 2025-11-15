@@ -73,7 +73,7 @@ Admin profile settings
 
 ### Landing Page
 
-![Landing Page](./screenshots/landing.png)
+![Landing Page]([./screenshots/landing.png](https://raw.githubusercontent.com/asmaulhossain45/B5-Assignment-6-Frontend/refs/heads/main/public/landing-page.png))
 
 ## 🚀 Live Deployment
 
